@@ -40,7 +40,6 @@ class ArticlesController extends AppController{
 		}
 	}
 
-	// コメント投稿を削除するためのメソッド
 	public function deleteComment($id){
 		if($this->request->is('get')){
 			throw new MethodNotAllowedException(__('このページは無効です'));
@@ -51,6 +50,16 @@ class ArticlesController extends AppController{
 		if($this->Comment->save($data, false, $fields)){
 			$this->Session->setFlash(__('このコメント(id=%s)は削除されました', h($id)));
 			return $this->redirect($this->referer());
+		}
+	}
+
+	public function create(){
+		if($this->request->is('post')){
+			if($this->Article->save($this->request->data)){
+				$this->Session->setFlash(__('あなたの雑学が投稿されました'));
+				return $this->redirect(array('action' => 'index'));
+			}
+			$this->Session->setFlash(__('雑学の投稿に失敗しました'));
 		}
 	}
 }
