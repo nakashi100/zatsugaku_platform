@@ -27,7 +27,26 @@
 	echo $this->Form->create('Comment'); // 挿入するModel名を記載
 	echo $this->Form->input('comment', array('type' => 'detail', 'placeholder' => '入力してください'));
 	echo $this->Form->input('article_id', array('type' => 'hidden', 'value' => $article_id));
-	// echo $this->Form->input('user_id', array('type' => 'hidden', 'value' => 1)); // 最後にログインユーザーが投稿者になるようにする	
+	echo $this->Form->input('user_id', array('type' => 'hidden', 'value' => 1)); // 最後にログインユーザーが投稿者になるように変更する	
+	echo $this->Form->end('投稿');
+
+	echo '<p>';
+	echo $this->Html->Link(
+			'雑学を編集する',
+				array(
+					'controller' => 'Articles',
+					'action' => 'edit', $article_id
+					)
+		);
+	echo '</p>';
+
+	echo '<p>';
+	echo $this->Form->postLink(
+			'雑学を削除する',
+				array('action' => 'delete', $article_id),
+				array('confirm' => '本当に削除してよろしいですか？')
+		);
+	echo '</p>';
 
 ?>
 
@@ -35,10 +54,6 @@
 
 
 <?php
-
-
-
-
 // デバッグ用
 	// echo '<pre>';
 	// var_dump($comments);

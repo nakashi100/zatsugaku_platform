@@ -62,6 +62,45 @@ class ArticlesController extends AppController{
 			$this->Session->setFlash(__('雑学の投稿に失敗しました'));
 		}
 	}
+
+	public function edit($id = null){
+		if(!$id){
+			throw new NotFoundException(__('このページは存在しません'));
+		}
+
+		$article = $this->Article->findById($id);
+		if(!$article){
+			throw new NotFoundException(__('データがありません'));
+		}
+
+		// editページにアクセスした際にフォームにデータをセットしておく
+		if(!$this->request->data){
+			$this->request->data = $article;
+		}
+
+		//編集ボタンが押された場合に、DBへの保存処理を行う
+		if($this->request->is(array('post', 'put'))){
+			$this->Article->id = $id;
+			if($this->Article->save($this->request->data)){
+				$this->Session->setFlash(__('雑学が編集されました'));
+				return $this->redirect(array('action' => 'detail', $id));
+			}
+			$this->Session->setFlash(__('雑学の編集に失敗しました'));
+		}
+	}
+
+	public function delete($id = null){
+		if($this->request->is('get')){
+			throw new MethodNotAllowedException(__('このページは無効です'));
+		}
+
+		$data = array('Article' => array('id' => $id, 'del_flg' => '1')); // 更新する内容を設定
+		$fields = array('del_flg'); // 更新する項目(フィールド指定)
+		if($this->Article->save($data, false, $fields)){
+			$this->Session->setFlash(__('この雑学(id=%s)は削除されました', h($id)));
+			return $this->redirect(array('action' => 'index'));
+		}
+	}
 }
 
 
