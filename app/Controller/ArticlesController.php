@@ -27,7 +27,7 @@ class ArticlesController extends AppController{
 
 		// 該当記事に関するコメントをviewに渡す
 		$comments = $this->Comment->getComments($id);
-		$this->set('comments',$comments);
+		$this->set('comments', $comments);
 
 		// コメント処理を行う
 		if($this->request->is('post')){
