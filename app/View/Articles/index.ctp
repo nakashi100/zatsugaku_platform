@@ -1,6 +1,7 @@
 <h2>投稿リスト</h2>
 
-<?php echo $this->Html->Link('雑学を投稿する', array('controller' => 'Articles', 'action' => 'create')); ?>
+<p><?php echo $this->Html->Link('雑学を投稿する', array('controller' => 'Articles', 'action' => 'create')); ?></p>
+<p><?php echo $this->Paginator->counter(array('format' => '[該当件数:{:count}件]')); ?></p>
 
 <table>
 	<tr>
@@ -27,11 +28,22 @@
 	?>
 </table>
 
+<!-- <?php echo $this->Paginator->counter(array('format' => 'TOTAL:{:count} | SHOWING:{:current} | PAGE:{:page}/{:pages}')); ?>-->
+
+<div class="paging">
+	<?php
+		echo $this->Paginator->prev('< '.__('previous'), array(), null, array('class' => 'prev disabled'));
+		echo $this->Paginator->numbers(array('separator' => ''));
+		echo $this->Paginator->next(__('next').'>', array(), null, array('class' => 'next disabled'));
+	?>
+</div>
+
+
 
 <?php
 // デバッグ用
 	// echo '<pre>';
-	// var_dump($test);
+	// var_dump($articles);
 	// echo '</pre>';
 
 ?>
