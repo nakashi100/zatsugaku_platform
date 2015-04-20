@@ -19,9 +19,30 @@ class UsersController extends AppController{
 		// 該当ユーザーの投稿した雑学一覧をviewに渡す
 		$articles = $this->Article->getArticles($id);
 		$this->set('articles', $articles);
-
 	}
 
+	public function edit($id = null){
+		$user = $this->User->findById($id);
+
+		if(!$id || !$user){
+			throw new NotFoundException(__('このページは存在しません'));
+		}
+
+		// editページにアクセスした際にフォームにデータをセットしておく
+		if(!$this->request->data){
+			$this->request->data = $user;
+		}
+
+		//編集ボタンが押された場合に、DBへの保存処理を行う
+		if($this->request->is(array('post', 'put'))){
+			$this->User->id = $id;
+			if($this->User->save($this->request->data)){
+				$this->Session->setFlash(__('ユーザー情報が編集されました'));
+				return $this->redirect(array('action' => 'view', $id));
+			}
+			$this->Session->setFlash(__('ユーザー情報の編集に失敗しました'));
+		}
+	}
 
 
 

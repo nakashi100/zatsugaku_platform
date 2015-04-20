@@ -8,3 +8,13 @@
 	foreach($articles as $article){
 		echo '<p>■'.$this->Html->Link($article['Article']['title'], array('controller' => 'Articles', 'action' => 'detail', $article['Article']['id'])).'</p>'; // とりあえずタイトルのみ表示⇒あとで変更する
 	}
+
+	echo '<p>';
+	echo $this->Html->Link(
+			'ユーザー情報を編集する',
+				array(
+					'controller' => 'Users',
+					'action' => 'edit', $user['User']['id']
+					)
+		);
+	echo '</p>';
