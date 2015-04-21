@@ -2,7 +2,13 @@
 class UsersController extends AppController{
 	public $uses = array('User', 'Article'); // Controlle内で他のModel(table)を利用できるようにする
 	public $helpers = array('Html', 'Form', 'Session'); // viewの拡張機能を呼び出す
-	public $components = array('Session'); // Controllerの拡張機能を呼び出す
+	public $components = array('Session', 'Paginator'); // Controllerの拡張機能を呼び出す
+	public $paginate = array(
+		'limit' => 3,
+		'order' => array(
+			'created' => 'desc'
+		)
+	);
 
 	public function view($id = null){
 		if(!$id){
@@ -16,8 +22,9 @@ class UsersController extends AppController{
 
 		$this->set('user', $user);
 
-		// 該当ユーザーの投稿した雑学一覧をviewに渡す
-		$articles = $this->Article->getArticles($id);
+		// 該当ユーザーの投稿した雑学一覧をpaginateした上でviewに渡す
+		$this->Paginator->settings = $this->paginate;
+		$articles = $this->Paginator->paginate('Article', array('Article.user_id' => $id, 'Article.del_flg' => '0'));
 		$this->set('articles', $articles);
 	}
 
