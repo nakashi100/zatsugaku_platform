@@ -6,14 +6,16 @@
 	echo '<p>■カテゴリ：'.$article['Category']['category_name'].'</p>';
 	echo '<p>■view数：'.$article['Article']['view'].'</p>';
 	echo '<p>■へぇ数：'.count($article['Like']).'</p>';
-	echo '<p>■投稿者：'.$article['User']['nickname'].'</p>';
+	echo '<p>■投稿者：'.$this->Html->Link($article['User']['nickname'], array('controller' =>'Users', 'action' => 'view', $article['Article']['user_id'])).'</p>';
 	echo '<p>■更新日：'.$article['Article']['created'].'</p>';
 	echo '<p>■詳細：'.$article['Article']['detail'].'</p>';
 
 	echo '<h4>コメント</h4>';
 	foreach ($comments as $comment) {
 		if($comment['Comment']['del_flg'] != 1){
-			echo '　　■'.h($comment['Comment']['comment']).'---'.$comment['Comment']['created'].'('.h($comment['User']['nickname']).')　　';
+			echo '　　■'.h($comment['Comment']['comment']);
+			echo '---'.$comment['Comment']['created'];
+			echo '('.$this->Html->Link(h($comment['User']['nickname']), array('controller' => 'Users', 'action' => 'view', $comment['Comment']['user_id'])).')　　';
 			echo $this->Form->postLink(
 				'削除',
 				array('action' => 'deleteComment', $comment['Comment']['id']), // deleteCommentというメソッドを実行するように指定

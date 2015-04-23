@@ -26,6 +26,14 @@ class Article extends AppModel{
 		// )
 	);
 
+	// 該当ユーザーの投稿した雑学を配列として取得するメソッド
+	public function getArticles($user_id){
+		$conditions = array(
+			'user_id' => $user_id
+		);
 
+		$articles = $this->find('all', array('conditions' => $conditions));
+		return $articles;
+	}
 
 }

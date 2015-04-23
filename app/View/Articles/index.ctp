@@ -1,6 +1,7 @@
 <h2>投稿リスト</h2>
 
-<?php echo $this->Html->Link('雑学を投稿する', array('controller' => 'Articles', 'action' => 'create')); ?>
+<p><?php echo $this->Html->Link('雑学を投稿する', array('controller' => 'Articles', 'action' => 'create')); ?></p>
+<p><?php echo $this->Paginator->counter(array('format' => '[該当件数:{:count}件]')); ?></p>
 
 <table>
 	<tr>
@@ -18,20 +19,31 @@
 					echo '<td>'.$article['Category']['category_name'].'</td>'; // カテゴリ
 					echo '<td>'.$article['Article']['view'].'</td>'; // View数
 					echo '<td>'.count($article['Like']).'</td>'; // へぇ数
-					echo '<td>'.$this->Html->Link($article['Article']['title'], array('controller' => 'articles', 'action' => 'detail', $article['Article']['id'])).'</td>'; // タイトル
+					echo '<td>'.$this->Html->Link($article['Article']['title'], array('controller' => 'Articles', 'action' => 'detail', $article['Article']['id'])).'</td>'; // タイトル
 					echo '<td>'.$article['Article']['detail'].'</td>'; // 詳細
-					echo '<td>'.$article['User']['nickname'].'</th>'; // 投稿者
+					echo '<td>'.$this->Html->Link($article['User']['nickname'], array('controller' => 'Users', 'action' => 'view', $article['Article']['user_id'])).'</th>'; // 投稿者
 				echo '</tr>';
 			}
 		}
 	?>
 </table>
 
+<!-- <?php echo $this->Paginator->counter(array('format' => 'TOTAL:{:count} | SHOWING:{:current} | PAGE:{:page}/{:pages}')); ?>-->
+
+<div class="paging">
+	<?php
+		echo $this->Paginator->prev('< '.__('previous'), array(), null, array('class' => 'prev disabled'));
+		echo $this->Paginator->numbers(array('separator' => ''));
+		echo $this->Paginator->next(__('next').'>', array(), null, array('class' => 'next disabled'));
+	?>
+</div>
+
+
 
 <?php
 // デバッグ用
 	// echo '<pre>';
-	// var_dump($test);
+	// var_dump($articles);
 	// echo '</pre>';
 
 ?>

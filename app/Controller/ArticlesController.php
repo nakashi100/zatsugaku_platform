@@ -2,16 +2,22 @@
 class ArticlesController extends AppController{
 	public $uses = array('Article', 'Like', 'Comment'); // Controlle内で他のModel(table)を利用できるようにする
 	public $helpers = array('Html', 'Form', 'Session'); // viewの拡張機能を呼び出す
-	public $components = array('Session'); // Controllerの拡張機能を呼び出す
+	public $components = array('Session', 'Paginator'); // Controllerの拡張機能を呼び出す
+	public $paginate = array( // Paginatorの設定
+		'limit' => 5,
+		'order' => array(
+			'created' => 'desc' // 降順(日付が新しい順)
+		)
+	);
 
 	public function index(){
 		// articlsデータをviewに渡す
-		// $articles = $this->Article->find('all', array('order' => array('created' => 'DESC')));
-		$articles = $this->Article->find('all');
-		$this->set('articles', $articles);
+		// $articles = $this->Article->find('all');
+		// $this->set('articles', $articles);
 
-		$likes = $this->Like->find('all');
-		$this->set('likes', $likes);
+		$this->Paginator->settings = $this->paginate;
+		$articles = $this->Paginator->paginate('Article', array('Article.del_flg' => '0')); // アソシエーションによりdel_flgが２つ存在するので「モデル名.del_flg」で指定
+		$this->set('articles', $articles);
 	}
 
 	public function detail($id = null){ // このidはarticleのid
@@ -27,7 +33,7 @@ class ArticlesController extends AppController{
 
 		// 該当記事に関するコメントをviewに渡す
 		$comments = $this->Comment->getComments($id);
-		$this->set('comments',$comments);
+		$this->set('comments', $comments);
 
 		// コメント処理を行う
 		if($this->request->is('post')){

@@ -1,0 +1,20 @@
+@charset UTF-8;
+
+
+.leftColumn {
+	float:left;
+	width:11%;
+	padding:10px 1.5%; /* 上下に10px 左右に1.5%のpaddingを指定 */
+}
+
+.mainColumn {
+	float:left;
+	width:69%;
+	padding:10px 1.5%;
+}
+
+.rightColumn {
+	float:left;
+	width:11%;
+	padding:10px 1.5%;
+}
