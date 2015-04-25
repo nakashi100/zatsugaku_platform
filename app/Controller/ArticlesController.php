@@ -11,12 +11,18 @@ class ArticlesController extends AppController{
 	);
 
 	public function index(){
-		// articlsデータをviewに渡す
-		// $articles = $this->Article->find('all');
-		// $this->set('articles', $articles);
-
 		$this->Paginator->settings = $this->paginate;
-		$articles = $this->Paginator->paginate('Article', array('Article.del_flg' => '0')); // アソシエーションによりdel_flgが２つ存在するので「モデル名.del_flg」で指定
+
+		if($this->request->query('category_id')){ // getの値を取得
+			// echo $this->request->query('category_id');
+			$categoryId = $this->request->query('category_id'); 
+			$articles = $this->Paginator->paginate('Article', array('Article.del_flg' => '0', 'Article.category_id' => $categoryId )); // アソシエーションによりdel_flgが２つ存在するので「モデル名.del_flg」で指定
+		}
+
+		if(!($this->request->query('category_id'))){
+			$articles = $this->Paginator->paginate('Article', array('Article.del_flg' => '0'));
+		}
+
 		$this->set('articles', $articles);
 	}
 

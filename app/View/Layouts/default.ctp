@@ -47,15 +47,22 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		<div id="content">
 
 			<div class="leftColumn">
-				<?php 
-					echo '左カラム'.'<br />'; 
-					echo '左カラム'.'<br />';
-					echo '左カラム'.'<br />';
-					echo '左カラム'.'<br />';
-					echo '左カラム'.'<br />';
-					echo '左カラム'.'<br />';
-					echo '左カラム'.'<br />';
-				?>
+
+				<p><?php echo $this->Html->Link('ALL',
+										array(
+											'controller' => 'Articles',
+											'action' => 'index',
+										)
+									); ?></p>
+				<?php foreach($categories as $category): ?>
+					<p><?php echo $this->Html->Link($category['Category']['category_name'],
+										array(
+											'controller' => 'Articles',
+											'action' => 'index',
+											'?' => array('category_id' => $category['Category']['id'])
+										)
+									); ?></p>
+				<?php endforeach; ?>
 			</div>
 
 			<div class="mainColumn">
