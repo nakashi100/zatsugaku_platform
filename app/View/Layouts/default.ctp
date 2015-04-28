@@ -40,9 +40,10 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 	<div id="container">
 		<div id="header">
 			<p align="center">雑学プラットフォーム</p>
+				<form method="get">
+					<input type="text" name="search" style="width:150px" placeholder="検索">
+				</form>
 		</div>
-
-
 
 		<div id="content">
 

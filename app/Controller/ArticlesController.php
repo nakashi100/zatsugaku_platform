@@ -3,27 +3,51 @@ class ArticlesController extends AppController{
 	public $uses = array('Article', 'Like', 'Comment'); // Controlle内で他のModel(table)を利用できるようにする
 	public $helpers = array('Html', 'Form', 'Session'); // viewの拡張機能を呼び出す
 	public $components = array('Session', 'Paginator'); // Controllerの拡張機能を呼び出す
-	public $paginate = array( // Paginatorの設定
+	public $paginate_new = array( // Paginatorの設定
 		'limit' => 5,
 		'order' => array(
-			'created' => 'desc' // 降順(日付が新しい順)
+			'Article.created' => 'desc' // 新着順
+		)
+	);
+	public $paginate_likes = array(
+		'limit' => 5,
+		'order' => array(
+			'Article.likes' => 'desc' // 人気順
 		)
 	);
 
 	public function index(){
-		$this->Paginator->settings = $this->paginate;
-
-		if($this->request->query('category_id')){ // getの値を取得
-			// echo $this->request->query('category_id');
-			$categoryId = $this->request->query('category_id'); 
-			$articles = $this->Paginator->paginate('Article', array('Article.del_flg' => '0', 'Article.category_id' => $categoryId )); // アソシエーションによりdel_flgが２つ存在するので「モデル名.del_flg」で指定
+	
+		///////////  ソート内容によってページネーションの設定を変更する　///////////
+		if( ($this->request->query('sort') == 1) || !($this->request->query('sort')) ){
+			$this->Paginator->settings = $this->paginate_new;
 		}
 
-		if(!($this->request->query('category_id'))){
+		if($this->request->query('sort') == 2){
+			$this->Paginator->settings = $this->paginate_likes;
+		}
+
+		///////////			カテゴリ指定・検索内容の有無			///////////
+		if($this->request->query('category_id')){ // getの値を取得するコマンド
+			$category_id = $this->request->query('category_id');
+			$articles = $this->Paginator->paginate('Article', array('Article.del_flg' => '0', 'Article.category_id' => $category_id)); // アソシエーションによりdel_flgが２つ存在するので「モデル名.del_flg」で指定
+		}
+
+		if(!($this->request->query('category_id'))){ // getで値が取得できない場合(ALL)
+			$category_id = 0;
 			$articles = $this->Paginator->paginate('Article', array('Article.del_flg' => '0'));
 		}
 
+		if($this->request->query('search_word')){
+			$search_word = $this->request->query('search_word');
+			$articles = $this->Paginator->paginate('Article', array('Article.del_flg' => '0', 'OR' => array ('Article.title LIKE' => '%'.$search_word.'%', 'Article.detail LIKE' => '%'.$search_word.'%', 'User.nickname LIKE' => '%'.$search_word.'%')));
+
+			// return $this->redirect(array('action' => 'detail', $id));
+		}
+
+		///////////  Viewにデータを渡す　///////////
 		$this->set('articles', $articles);
+		$this->set('category_id', $category_id);
 	}
 
 	public function detail($id = null){ // このidはarticleのid
