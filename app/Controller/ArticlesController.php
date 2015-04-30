@@ -74,6 +74,10 @@ class ArticlesController extends AppController{
 			}
 			$this->Session->setFlash(__('コメントできませんでした'));
 		}
+
+		// 該当ユーザーの該当記事へのいいねの有無を調べてviewに渡す
+		$like = $this->Like->findAllByUserIdAndArticleId(1, $id); // 実際にはログインユーザーに変更する
+		$this->set('like', $like);
 	}
 
 	public function deleteComment($id){
@@ -137,7 +141,46 @@ class ArticlesController extends AppController{
 			return $this->redirect(array('action' => 'index'));
 		}
 	}
+
+	public function like($article_id = null, $user_id = null){ // このidはarticleのid
+		if($this->request->is('get')){
+			throw new MethodNotAllowedException();
+		}
+
+		$article = $this->Article->findById($article_id);
+
+		// likeテーブルに追加する
+		$data = array('Like' => array('article_id' => $article_id, 'user_id' => $user_id));
+		$fields = array('article_id', 'user_id'); // 登録する項目(フィールド指定)
+		$this->Like->save($data, false, $fields); // 登録
+
+		// articleテーブルを変更する
+		$data2= array('Article' => array('id' => $article_id, 'likes' => $article['Article']['likes']+1)); // 更新する内容を設定
+		$fields2 = array('likes'); // 更新する項目(フィールド指定)
+		$this->Article->save($data2, false, $fields2);
+
+		$this->Session->setFlash(__('この記事をイイネしました!'));
+		return $this->redirect($this->referer());
+	}
+
+	public function resetLike($article_id = null, $user_id =null){
+		if($this->request->is('get')){
+			throw new MethodNotAllowedException();
+		}
+
+		// likeテーブルからdataを削除する
+		$like = $this->Like->findByArticleIdAndUserId($article_id, $user_id);
+		$like_id = $like['Like']['id'];
+		$this->Like->delete($like_id);
+
+		// articleテーブルを変更する
+		$article = $this->Article->findById($article_id);
+		$data = array('Article' => array('id' => $article_id, 'likes' => $article['Article']['likes']-1)); // 更新内容
+		$fields = array('likes'); // 更新する項目
+		$this->Article->save($data, false, $fields);
+
+		$this->Session->setFlash(__('この記事へのイイネを取り消しました'));
+		return $this->redirect($this->referer());
+	}
+
 }
-
-
-

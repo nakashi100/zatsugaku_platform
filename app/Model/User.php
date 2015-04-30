@@ -5,6 +5,10 @@ class User extends AppModel{
 		'Article' => array(
 			'className' => 'Article',
 			'foreignKey' => 'user_id'
+		),
+		'Like' => array(
+			'className' => 'Like',
+			'foreignKey' => 'user_id'
 		)
 	);
 

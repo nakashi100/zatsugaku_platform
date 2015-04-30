@@ -3,6 +3,27 @@
 
 <?php
 	echo '<h2>'.$article['Article']['title'].'</h2>';
+
+	//////////////// いいねの処理 ////////////////
+	if($like){ 
+		echo '<p>';
+			echo $this->Form->postLink(
+					'イイネを取り消す',
+					array('action' => 'resetLike', $article['Article']['id'], 1) // 実際にはログインユーザーに変更する
+				);
+		echo '</p>';
+	}
+
+	if(!$like){
+		echo '<p>';
+			echo $this->Form->postLink(
+					'イイネする！',
+					array('action' => 'like', $article['Article']['id'], 1) // 実際にはログインユーザーに変更する
+				);
+		echo '</p>';
+	}
+
+
 	echo '<p>■カテゴリ：'.$article['Category']['category_name'].'</p>';
 	echo '<p>■view数：'.$article['Article']['view'].'</p>';
 	echo '<p>■へぇ数：'.count($article['Like']).'</p>';
@@ -57,7 +78,7 @@
 
 <?php
 // デバッグ用
-	// echo '<pre>';
-	// var_dump($comments);
-	// echo '</pre>';
+	echo '<pre>';
+	var_dump($article);
+	echo '</pre>';
 ?>
