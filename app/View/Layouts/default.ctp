@@ -40,9 +40,10 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 	<div id="container">
 		<div id="header">
 			<p align="center">雑学プラットフォーム</p>
-				<form method="get">
-					<input type="text" name="search" style="width:150px" placeholder="検索">
-				</form>
+				
+			<form method="get">
+				<input type="text" name="search" style="width:150px" placeholder="検索">
+			</form>
 		</div>
 
 		<div id="content">
@@ -72,15 +73,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 			</div>
 
 			<div class="rightColumn">
-				<?php 
-					echo '右カラム'.'<br />'; 
-					echo '右カラム'.'<br />';
-					echo '右カラム'.'<br />';
-					echo '右カラム'.'<br />';
-					echo '右カラム'.'<br />';
-					echo '右カラム'.'<br />';
-					echo '右カラム'.'<br />';
-				?>
+				<p><?php echo $this->Html->Link('お気に入り雑学', array('controller' => 'Articles', 'action' => 'index', '?' => array('favorites' => 1))) ?></p> <!-- 実際はログインユーザーに変更する -->
 			</div>
 
 		</div>
