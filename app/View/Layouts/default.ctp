@@ -73,12 +73,11 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 			</div>
 
 			<div class="rightColumn">
-				<p><?php echo $this->Html->Link('お気に入り雑学', array('controller' => 'Articles', 'action' => 'index', '?' => array('favorites' => 1))) ?></p> <!-- 実際はログインユーザーに変更する -->
+				<p><?php echo $this->Html->Link('お入り雑学', array('controller' => 'Articles', 'action' => 'index', '?' => array('favorites' => 1))); ?></p> <!-- 実際はログインユーザーに変更する -->
+				<p><?php echo $this->Html->Link('ユーザー登録', array('controller' => 'Users', 'action' => 'signup')); ?></p>
 			</div>
 
 		</div>
-
-
 
 
 		<div id="footer">
