@@ -1,4 +1,9 @@
 <?php
+// パスワードハッシュ化の準備
+App::uses('AppModel', 'Model');
+App::uses('SimplePasswordHasher', 'Controller/Component/Auth');
+
+
 class User extends AppModel{
 
 	public $hasMany = array(
@@ -34,6 +39,14 @@ class User extends AppModel{
 		)
 	);
 
+	// パスワードのハッシュ化
+	public function beforeSave($options = array()){
+		if(isset($this->data[$this->alias]['password'])){
+			$passwordHasher = new SimplePasswordHasher();
+			$this->data[$this->alias]['password'] = $passwordHasher->hash($this->data[$this->alias]['password']);
+		}
+		return true;
+	}
 
 }
 
