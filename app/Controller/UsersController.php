@@ -51,6 +51,17 @@ class UsersController extends AppController{
 		}
 	}
 
+	public function signup(){
+		if($this->request->is('post')){
+			$this->User->create();
+			if($this->User->save($this->request->data)){
+				return $this->redirect(array('controller' => 'Articles', 'action' => 'index')); // 実際にはapprovalに飛ばしてauth処理を行う
+			}else{
+				$this->Session->setFlash(__('ユーザー登録に失敗しました。'));
+			}
+		}
+	}
+
 
 
 }

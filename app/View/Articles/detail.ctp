@@ -3,6 +3,46 @@
 
 <?php
 	echo '<h2>'.$article['Article']['title'].'</h2>';
+
+	//////////////// いいねの処理 ////////////////
+	if($like){ 
+		echo '<p>';
+			echo $this->Form->postLink(
+					'イイネを取り消す',
+					array('action' => 'resetLike', $article['Article']['id'], 1) // 実際にはログインユーザーに変更する
+				);
+		echo '</p>';
+	}
+
+	if(!$like){
+		echo '<p>';
+			echo $this->Form->postLink(
+					'イイネする！',
+					array('action' => 'like', $article['Article']['id'], 1) // 実際にはログインユーザーに変更する
+				);
+		echo '</p>';
+	}
+
+	//////////////// お気に入りの処理 ////////////////
+	if($favorite){
+		echo '<p>';
+			echo $this->Form->postLink(
+					'お気に入りを取り消す',
+					array('action' => 'resetFavorite', $article['Article']['id'], 1) // 実際にはログインユーザーに変更する
+				);
+		echo '</p>';
+	}
+
+	if(!$favorite){
+		echo '<p>';
+			echo $this->Form->postLink(
+					'お気に入りに登録する',
+					array('action' => 'favorite', $article['Article']['id'], 1) // 実際にはログインユーザーに変更する
+				);
+		echo '</p>';
+	}
+
+
 	echo '<p>■カテゴリ：'.$article['Category']['category_name'].'</p>';
 	echo '<p>■view数：'.$article['Article']['view'].'</p>';
 	echo '<p>■へぇ数：'.count($article['Like']).'</p>';
@@ -58,6 +98,6 @@
 <?php
 // デバッグ用
 	// echo '<pre>';
-	// var_dump($comments);
+	// var_dump($article);
 	// echo '</pre>';
 ?>

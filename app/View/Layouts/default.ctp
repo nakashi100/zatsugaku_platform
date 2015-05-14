@@ -40,22 +40,31 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 	<div id="container">
 		<div id="header">
 			<p align="center">雑学プラットフォーム</p>
+				
+			<form method="get">
+				<input type="text" name="search" style="width:150px" placeholder="検索">
+			</form>
 		</div>
-
-
 
 		<div id="content">
 
 			<div class="leftColumn">
-				<?php 
-					echo '左カラム'.'<br />'; 
-					echo '左カラム'.'<br />';
-					echo '左カラム'.'<br />';
-					echo '左カラム'.'<br />';
-					echo '左カラム'.'<br />';
-					echo '左カラム'.'<br />';
-					echo '左カラム'.'<br />';
-				?>
+
+				<p><?php echo $this->Html->Link('ALL',
+										array(
+											'controller' => 'Articles',
+											'action' => 'index',
+										)
+									); ?></p>
+				<?php foreach($categories as $category): ?>
+					<p><?php echo $this->Html->Link($category['Category']['category_name'],
+										array(
+											'controller' => 'Articles',
+											'action' => 'index',
+											'?' => array('category_id' => $category['Category']['id'])
+										)
+									); ?></p>
+				<?php endforeach; ?>
 			</div>
 
 			<div class="mainColumn">
@@ -64,20 +73,11 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 			</div>
 
 			<div class="rightColumn">
-				<?php 
-					echo '右カラム'.'<br />'; 
-					echo '右カラム'.'<br />';
-					echo '右カラム'.'<br />';
-					echo '右カラム'.'<br />';
-					echo '右カラム'.'<br />';
-					echo '右カラム'.'<br />';
-					echo '右カラム'.'<br />';
-				?>
+				<p><?php echo $this->Html->Link('お入り雑学', array('controller' => 'Articles', 'action' => 'index', '?' => array('favorites' => 1))); ?></p> <!-- 実際はログインユーザーに変更する -->
+				<p><?php echo $this->Html->Link('ユーザー登録', array('controller' => 'Users', 'action' => 'signup')); ?></p>
 			</div>
 
 		</div>
-
-
 
 
 		<div id="footer">

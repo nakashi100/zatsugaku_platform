@@ -31,4 +31,17 @@ App::uses('Controller', 'Controller');
  * @link		http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
 class AppController extends Controller {
+	public $uses = array('Category');
+
+	public function beforeFilter(){
+		$categories = $this->Category->find('all');
+		$this->set('categories', $categories);
+
+		if($this->request->query('search')){
+				$search_word = $this->request->query('search');
+				return $this->redirect(array('controller' => 'Articles' , 'action' => 'index' , '?' => array('search_word' => $search_word)));
+		}
+	
+	}
+
 }

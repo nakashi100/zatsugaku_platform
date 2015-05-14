@@ -1,23 +1,66 @@
 <?php
 class ArticlesController extends AppController{
-	public $uses = array('Article', 'Like', 'Comment'); // Controlle内で他のModel(table)を利用できるようにする
+	public $uses = array('Article', 'Like', 'Comment', 'Favorite'); // Controlle内で他のModel(table)を利用できるようにする
 	public $helpers = array('Html', 'Form', 'Session'); // viewの拡張機能を呼び出す
 	public $components = array('Session', 'Paginator'); // Controllerの拡張機能を呼び出す
-	public $paginate = array( // Paginatorの設定
+	public $paginate_new = array( // Paginatorの設定
 		'limit' => 5,
 		'order' => array(
-			'created' => 'desc' // 降順(日付が新しい順)
+			'Article.created' => 'desc' // 新着順
+		)
+	);
+	public $paginate_likes = array(
+		'limit' => 5,
+		'order' => array(
+			'Article.likes' => 'desc' // 人気順
 		)
 	);
 
 	public function index(){
-		// articlsデータをviewに渡す
-		// $articles = $this->Article->find('all');
-		// $this->set('articles', $articles);
+	
+		///////////  ソート内容によってページネーションの設定を変更する　///////////
+		if( ($this->request->query('sort') == 1) || !($this->request->query('sort')) ){
+			$this->Paginator->settings = $this->paginate_new;
+		}
 
-		$this->Paginator->settings = $this->paginate;
-		$articles = $this->Paginator->paginate('Article', array('Article.del_flg' => '0')); // アソシエーションによりdel_flgが２つ存在するので「モデル名.del_flg」で指定
+		if($this->request->query('sort') == 2){
+			$this->Paginator->settings = $this->paginate_likes;
+		}
+
+		///////////			カテゴリ指定・検索内容の有無			///////////
+		if($this->request->query('category_id')){ // getの値を取得するコマンド
+			$category_id = $this->request->query('category_id');
+			$articles = $this->Paginator->paginate('Article', array('Article.del_flg' => '0', 'Article.category_id' => $category_id)); // アソシエーションによりdel_flgが２つ存在するので「モデル名.del_flg」で指定
+
+			$category= $this->Category->findById($category_id);
+			$category_name = $category['Category']['category_name'];
+			$this->set('category_name', $category_name);
+		}
+
+		if(!($this->request->query('category_id'))){ // getで値が取得できない場合(ALL)、category_id=0の場合もここで処理される?
+			$category_id = 0;
+			$articles = $this->Paginator->paginate('Article', array('Article.del_flg' => '0'));
+		}
+
+		if($this->request->query('search_word')){
+			$search_word = $this->request->query('search_word');
+			$articles = $this->Paginator->paginate('Article', array('Article.del_flg' => '0', 'OR' => array ('Article.title LIKE' => '%'.$search_word.'%', 'Article.detail LIKE' => '%'.$search_word.'%', 'User.nickname LIKE' => '%'.$search_word.'%')));
+			$this->set('search_word', $search_word);
+		}
+
+		if($this->request->query('favorites')){
+			$category_id = 0;
+			$user_id = $this->request->query('favorites');
+
+			$article_id_list = $this->Favorite->find('list', array('fields' => 'Favorite.article_id', 'conditions' => array('Favorite.user_id' => $user_id)));
+
+			$articles = $this->Paginator->paginate('Article', array('Article.del_flg' => '0', 'Article.id' => array_values($article_id_list)));
+		}
+
+
+		///////////  Viewにデータを渡す　///////////
 		$this->set('articles', $articles);
+		$this->set('category_id', $category_id);
 	}
 
 	public function detail($id = null){ // このidはarticleのid
@@ -44,6 +87,14 @@ class ArticlesController extends AppController{
 			}
 			$this->Session->setFlash(__('コメントできませんでした'));
 		}
+
+		// 該当ユーザーの該当記事へのいいねの有無を調べてviewに渡す
+		$like = $this->Like->findAllByUserIdAndArticleId(1, $id); // 実際にはログインユーザーに変更する
+		$this->set('like', $like);
+
+		// 該当ユーザーの該当記事へのお気に入りの有無を調べてviewに渡す
+		$favorite = $this->Favorite->findAllByUserIdAndArticleId(1, $id); // 実際にはログインユーザーに変更する
+		$this->set('favorite', $favorite);
 	}
 
 	public function deleteComment($id){
@@ -107,7 +158,74 @@ class ArticlesController extends AppController{
 			return $this->redirect(array('action' => 'index'));
 		}
 	}
+
+	public function like($article_id = null, $user_id = null){ // このidはarticleのid
+		if($this->request->is('get')){
+			throw new MethodNotAllowedException();
+		}
+
+		$article = $this->Article->findById($article_id);
+
+		// likeテーブルに追加する
+		$data = array('Like' => array('article_id' => $article_id, 'user_id' => $user_id)); // 更新する内容を設定
+		$fields = array('article_id', 'user_id'); // 登録する項目(フィールド指定)
+		$this->Like->save($data, false, $fields); // 登録
+
+		// articleテーブルを変更する
+		$data2= array('Article' => array('id' => $article_id, 'likes' => $article['Article']['likes']+1));
+		$fields2 = array('likes');
+		$this->Article->save($data2, false, $fields2);
+
+		$this->Session->setFlash(__('この記事をイイネしました!'));
+		return $this->redirect($this->referer());
+	}
+
+	public function resetLike($article_id = null, $user_id =null){
+		if($this->request->is('get')){
+			throw new MethodNotAllowedException();
+		}
+
+		// likeテーブルからdataを削除する
+		$like = $this->Like->findByArticleIdAndUserId($article_id, $user_id);
+		$like_id = $like['Like']['id'];
+		$this->Like->delete($like_id);
+
+		// articleテーブルを変更する
+		$article = $this->Article->findById($article_id);
+		$data = array('Article' => array('id' => $article_id, 'likes' => $article['Article']['likes']-1)); // 更新する内容
+		$fields = array('likes'); // 更新する項目
+		$this->Article->save($data, false, $fields);
+
+		$this->Session->setFlash(__('この記事へのイイネを取り消しました'));
+		return $this->redirect($this->referer());
+	}
+
+	public function favorite($article_id = null, $user_id = null){ // このidはarticleのid
+		if($this->request->is('get')){
+			throw new MethodNotAllowedException();
+		}
+
+		// favoriteテーブルに追加する
+		$data = array('Favorite' => array('article_id' => $article_id, 'user_id' => $user_id)); // 更新する内容
+		$fields = array('article_id', 'user_id'); // 登録する項目(フィールド指定)
+		$this->Favorite->save($data, false, $fields); // 登録
+
+		$this->Session->setFlash(__('この記事をお気に入りに登録しました!'));
+		return $this->redirect($this->referer());
+	}
+
+	public function resetFavorite($article_id = null, $user_id =null){
+		if($this->request->is('get')){
+			throw new MethodNotAllowedException();
+		}
+
+		// favoiteテーブルからdataを削除する
+		$favorite = $this->Favorite->findByArticleIdAndUserId($article_id, $user_id);
+		$favorite_id = $favorite['Favorite']['id'];
+		if($this->Favorite->delete($favorite_id)){
+			$this->Session->setFlash(__('この記事へのイイネを取り消しました'));
+			return $this->redirect($this->referer());
+		}
+	}
+
 }
-
-
-

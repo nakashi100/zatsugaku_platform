@@ -20,9 +20,9 @@ class Article extends AppModel{
 			'className' => 'Like',
 			'foreignKey' => 'article_id'
 		),
-		// 'Comment' => array(
-		// 	'className' => 'Comment',
-		// 	'foreignKey' => 'article_id'
+		// 'Favorite' => array(
+		// 	'className' => 'Favorite',
+		// 	'foreignKey' => 'article_id',
 		// )
 	);
 

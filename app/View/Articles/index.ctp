@@ -1,7 +1,15 @@
-<h2>投稿リスト</h2>
+<?php if($this->request->query('favorites')){ echo '<h2>'.'お気に入り雑学'.'</h2>'; } ?>
+<?php if($this->request->query('category_id')){ echo '<h2>'.$category_name.'</h2>'; } ?>
+<?php if($this->request->query('search_word')){ echo '<p>「'.$search_word.'」で検索した結果'.'</p>'; } ?>
+<?php if($category_id == 0){ echo '<h2>全雑学一覧</h2>'; } ?>
 
 <p><?php echo $this->Html->Link('雑学を投稿する', array('controller' => 'Articles', 'action' => 'create')); ?></p>
-<p><?php echo $this->Paginator->counter(array('format' => '[該当件数:{:count}件]')); ?></p>
+<p>
+	<?php echo $this->Html->Link('新着順', array('controller' => 'Articles', 'action' => 'index', '?' => array('category_id' => $category_id, 'sort' => 1))); ?>
+	<?php echo $this->Html->Link('人気順', array('controller' => 'Articles', 'action' => 'index', '?' => array('category_id' => $category_id, 'sort' => 2))); ?>
+	<?php echo $this->Paginator->counter(array('format' => '[該当件数:{:count}件]')); ?>
+</p>
+
 
 <table>
 	<tr>
@@ -42,8 +50,8 @@
 
 <?php
 // デバッグ用
-	// echo '<pre>';
-	// var_dump($articles);
-	// echo '</pre>';
+	echo '<pre>';
+	var_dump($articles);
+	echo '</pre>';
 
 ?>
