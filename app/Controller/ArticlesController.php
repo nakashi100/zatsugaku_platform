@@ -89,11 +89,12 @@ class ArticlesController extends AppController{
 		}
 
 		// 該当ユーザーの該当記事へのいいねの有無を調べてviewに渡す
-		$like = $this->Like->findAllByUserIdAndArticleId(1, $id); // 実際にはログインユーザーに変更する
+		$loginUser = $this->Auth->user();
+		$like = $this->Like->findAllByUserIdAndArticleId($loginUser['id'], $id);
 		$this->set('like', $like);
 
 		// 該当ユーザーの該当記事へのお気に入りの有無を調べてviewに渡す
-		$favorite = $this->Favorite->findAllByUserIdAndArticleId(1, $id); // 実際にはログインユーザーに変更する
+		$favorite = $this->Favorite->findAllByUserIdAndArticleId($loginUser['id'], $id);
 		$this->set('favorite', $favorite);
 	}
 

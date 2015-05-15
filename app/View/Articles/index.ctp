@@ -50,8 +50,7 @@
 
 <?php
 // デバッグ用
-	echo '<pre>';
-	var_dump($articles);
-	echo '</pre>';
-
+	// echo '<pre>';
+	// var_dump($articles);
+	// echo '</pre>';
 ?>
