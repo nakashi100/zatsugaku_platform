@@ -1,4 +1,5 @@
 <?php
+	echo '<p>'.$this->Upload->uploadImage($user, 'User.img', array('style' => 'thumb')).'</p>';
 	echo '<h2>'.$user['User']['nickname'].'</h2>';
 	echo '<p>';
 		if($user['User']['gender'] == 1){ echo '男'; }else if($user['User']['gender'] == 2){ echo '女'; };

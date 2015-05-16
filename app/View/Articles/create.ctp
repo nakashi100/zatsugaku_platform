@@ -39,7 +39,7 @@
 			'user_id',
 			array(
 				'type' => 'hidden',
-				'value' => '1' // 'value' => $loginUser['id']));に変更する
+				'value' => $loginUser['id']
 			)
 		);
 

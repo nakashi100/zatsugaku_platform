@@ -40,7 +40,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 	<div id="container">
 		<div id="header">
 			<p align="center">雑学プラットフォーム</p>
-				
+
 			<form method="get">
 				<input type="text" name="search" style="width:150px" placeholder="検索">
 			</form>
@@ -73,8 +73,17 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 			</div>
 
 			<div class="rightColumn">
-				<p><?php echo $this->Html->Link('お入り雑学', array('controller' => 'Articles', 'action' => 'index', '?' => array('favorites' => 1))); ?></p> <!-- 実際はログインユーザーに変更する -->
-				<p><?php echo $this->Html->Link('ユーザー登録', array('controller' => 'Users', 'action' => 'signup')); ?></p>
+				<?php
+					if(isset($loginUser)){
+						echo '<p>'.$loginUser['nickname'].'</p>';
+						echo '<p>'.$this->Html->Link('マイページ', array('controller' => 'Users', 'action' => 'view', $loginUser['id'])).'</p>';
+						echo '<p>'.$this->Html->Link('お気に入り雑学', array('controller' => 'Articles', 'action' => 'index', '?' => array('favorites' => $loginUser['id']))).'</p>';
+						echo '<p>'.$this->Html->Link('ログアウト', array('controller' => 'Users', 'action' => 'logout')).'</p>';
+					}else{
+						echo '<p>'.$this->Html->Link('ログイン', array('controller' => 'Users', 'action' => 'login')).'</p>';
+						echo '<p>'.$this->Html->Link('ユーザー登録', array('controller' => 'Users', 'action' => 'signup')).'</p>';
+					}
+				?>
 			</div>
 
 		</div>

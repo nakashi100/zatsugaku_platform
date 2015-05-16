@@ -1,7 +1,8 @@
 <?php
+
 class UsersController extends AppController{
 	public $uses = array('User', 'Article'); // Controlle内で他のModel(table)を利用できるようにする
-	public $helpers = array('Html', 'Form', 'Session'); // viewの拡張機能を呼び出す
+	public $helpers = array('Html', 'Form', 'Session', 'UploadPack.Upload'); // viewの拡張機能を呼び出す
 	public $components = array('Session', 'Paginator'); // Controllerの拡張機能を呼び出す
 	public $paginate = array(
 		'limit' => 3,
@@ -9,6 +10,25 @@ class UsersController extends AppController{
 			'created' => 'desc'
 		)
 	);
+
+	public function beforeFilter(){
+		parent::beforeFilter();
+		$this->Auth->allow('view', 'login', 'logout', 'signup'); // 全てのユーザーがアクセス可能
+	}
+
+/**
+ * 権限設定
+ */
+	public function isAuthorized($user = null){
+		// オーナーのみ可能
+		if(in_array($this->action, array('edit'))){
+			$userId = (int) $this->request->params['pass'][0];
+			if($userId == $user['id']){
+				return true;
+			}
+		}
+		return parent::isAuthorized($user);
+	}
 
 	public function view($id = null){
 		if(!$id){
@@ -62,6 +82,30 @@ class UsersController extends AppController{
 		}
 	}
 
+	public function login(){
+		if($this->request->is('post')){
+			if($this->Auth->login()){
+				return $this->redirect(array('controller' => 'articles', 'action' => 'index'));
+			}else{
+				$this->Session->setFlash(__('メールアドレスもしくはパスワードに間違いがあります'));
+			}
+		}
 
+		// 直接URLを打ち込んだ場合の対応
+		// else if ($this->Auth->user()) {
+  //           $loginUser = $this->Auth->user();
+  //           if ($loginUser['del_flg'] == 0 && $loginUser['role'] != 0) {
+  //               return $this->redirect(array('controller' => 'events', 'action' => 'index'));
+  //           } else if($loginUser['del_flg'] == 1) {
+  //               return $this->redirect(array('action' => 'logout'));
+  //           }
+  //       }
+	}
+
+	public function logout(){
+		$this->Auth->logout();
+		$this->Session->destroy();
+		return $this->redirect(array('action' => 'login'));
+	}
 
 }

@@ -16,8 +16,54 @@ class ArticlesController extends AppController{
 		)
 	);
 
+	public function beforeFilter(){
+		parent::beforeFilter();
+		$this->Auth->allow('index', 'detail');
+
+		// 済・・・'edit', 'delete','create','like', 'favorite','reseteLike', resetFavorite'
+		// 未・・・'deleteComment', はauthor
+	}
+
+/**
+ * 権限設定
+ */
+	public function isAuthorized($user = null){
+		// ログインユーザーならばだれでも可能
+		if(in_array($this->action, array('create', 'like', 'favorite'))){
+			return true;
+		}
+
+		// オーナーのみ可能
+		if(in_array($this->action, array('edit', 'delete'))){
+			$articleId = (int) $this->request->params['pass']['0'];
+			$article = $this->Article->findById($articleId);
+			$articleUserId = $article['Article']['user_id'];
+
+			if($articleUserId == $user['id']){
+				return true;
+			}
+		}
+
+		if(in_array($this->action, array('resetLike', 'resetFavorite'))){
+			$userId = (int) $this->request->parms['pass']['0'];
+
+			return true;
+		}
+
+		if($this->action === 'deleteComment'){
+			$commentId = (int) $this->request->params['pass']['0'];
+			$comment = $this->Comment->findById($commentId);
+			$commentUserId = $comment['Comment']['user_id'];
+
+			if($commentUserId == $user['id']){
+				return true;
+			}
+		}
+
+		return parent::isAuthorized($user);
+	}
+
 	public function index(){
-	
 		///////////  ソート内容によってページネーションの設定を変更する　///////////
 		if( ($this->request->query('sort') == 1) || !($this->request->query('sort')) ){
 			$this->Paginator->settings = $this->paginate_new;
@@ -89,11 +135,12 @@ class ArticlesController extends AppController{
 		}
 
 		// 該当ユーザーの該当記事へのいいねの有無を調べてviewに渡す
-		$like = $this->Like->findAllByUserIdAndArticleId(1, $id); // 実際にはログインユーザーに変更する
+		$loginUser = $this->Auth->user();
+		$like = $this->Like->findAllByUserIdAndArticleId($loginUser['id'], $id);
 		$this->set('like', $like);
 
 		// 該当ユーザーの該当記事へのお気に入りの有無を調べてviewに渡す
-		$favorite = $this->Favorite->findAllByUserIdAndArticleId(1, $id); // 実際にはログインユーザーに変更する
+		$favorite = $this->Favorite->findAllByUserIdAndArticleId($loginUser['id'], $id);
 		$this->set('favorite', $favorite);
 	}
 
@@ -223,7 +270,7 @@ class ArticlesController extends AppController{
 		$favorite = $this->Favorite->findByArticleIdAndUserId($article_id, $user_id);
 		$favorite_id = $favorite['Favorite']['id'];
 		if($this->Favorite->delete($favorite_id)){
-			$this->Session->setFlash(__('この記事へのイイネを取り消しました'));
+			$this->Session->setFlash(__('この記事へのお気に入り登録を取り消しました'));
 			return $this->redirect($this->referer());
 		}
 	}

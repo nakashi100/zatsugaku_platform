@@ -39,8 +39,16 @@
 				'birthday',
 				array(
 					'label' => '誕生日',
-					// 'minYear' => date('Y') - 80,
-					// 'maxYear' => date('Y')
+					'minYear' => date('Y') - 80,
+					'maxYear' => date('Y')
+				)
+			);
+
+			echo $this->Form->input(
+				'img',
+				array(
+					'type' => 'file',
+					'label' => 'プロフィール画像'
 				)
 			);
 
@@ -49,6 +57,14 @@
 				array(
 					'label' => '自己紹介',
 					'type' => 'textarea'
+				)
+			);
+
+			echo $this->Form->input(
+				'role',
+				array(
+					'value' => '1',
+					'type' => 'hidden'
 				)
 			);
 		?>

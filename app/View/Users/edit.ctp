@@ -22,9 +22,18 @@
 		);
 
 	echo $this->Form->input(
+				'img',
+				array(
+					'type' => 'file',
+					'label' => 'プロフィール画像'
+				)
+			);
+
+	echo $this->Form->input(
 			'introduce',
 			array(
 				'label' => '紹介文',
+				'type' => 'textarea'
 			)
 		);
 

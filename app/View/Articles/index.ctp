@@ -49,9 +49,11 @@
 
 
 <?php
+// echo ini_get('upload_max_filesize');
+//   echo ini_get('post_max_size');
+//   echo ini_get('memory_limit');
 // デバッグ用
-	echo '<pre>';
-	var_dump($articles);
-	echo '</pre>';
-
+	// echo '<pre>';
+	// var_dump($articles);
+	// echo '</pre>';
 ?>

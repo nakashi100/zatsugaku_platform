@@ -9,7 +9,7 @@
 		echo '<p>';
 			echo $this->Form->postLink(
 					'イイネを取り消す',
-					array('action' => 'resetLike', $article['Article']['id'], 1) // 実際にはログインユーザーに変更する
+					array('action' => 'resetLike', $article['Article']['id'], $loginUser['id'])
 				);
 		echo '</p>';
 	}
@@ -18,7 +18,7 @@
 		echo '<p>';
 			echo $this->Form->postLink(
 					'イイネする！',
-					array('action' => 'like', $article['Article']['id'], 1) // 実際にはログインユーザーに変更する
+					array('action' => 'like', $article['Article']['id'], $loginUser['id'])
 				);
 		echo '</p>';
 	}
@@ -28,7 +28,7 @@
 		echo '<p>';
 			echo $this->Form->postLink(
 					'お気に入りを取り消す',
-					array('action' => 'resetFavorite', $article['Article']['id'], 1) // 実際にはログインユーザーに変更する
+					array('action' => 'resetFavorite', $article['Article']['id'], $loginUser['id'])
 				);
 		echo '</p>';
 	}
@@ -37,7 +37,7 @@
 		echo '<p>';
 			echo $this->Form->postLink(
 					'お気に入りに登録する',
-					array('action' => 'favorite', $article['Article']['id'], 1) // 実際にはログインユーザーに変更する
+					array('action' => 'favorite', $article['Article']['id'], $loginUser['id'])
 				);
 		echo '</p>';
 	}
@@ -69,7 +69,7 @@
 	echo $this->Form->create('Comment'); // 挿入するModel名を記載
 	echo $this->Form->input('comment', array('type' => 'detail', 'placeholder' => '入力してください'));
 	echo $this->Form->input('article_id', array('type' => 'hidden', 'value' => $article_id));
-	echo $this->Form->input('user_id', array('type' => 'hidden', 'value' => 1)); // 最後にログインユーザーが投稿者になるように変更する	
+	echo $this->Form->input('user_id', array('type' => 'hidden', 'value' => $loginUser['id']));
 	echo $this->Form->end('投稿');
 
 	echo '<p>';
