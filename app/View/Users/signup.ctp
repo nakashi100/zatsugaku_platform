@@ -45,6 +45,14 @@
 			);
 
 			echo $this->Form->input(
+				'img',
+				array(
+					'type' => 'file',
+					'label' => 'プロフィール画像'
+				)
+			);
+
+			echo $this->Form->input(
 				'introduce',
 				array(
 					'label' => '自己紹介',

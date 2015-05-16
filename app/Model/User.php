@@ -39,7 +39,24 @@ class User extends AppModel{
 		)
 	);
 
-	// パスワードのハッシュ化
+/**
+ * 画像アップロード機能の設定
+ */
+    public $actsAs = array(
+        'UploadPack.Upload' => array(
+            'img' => array( // ここでは、"_file_name"を除いたカラム名を書く
+                'quality' => 95, // 画質指定 デフォルトでは75
+                'styles' => array(
+                    'thumb' => '85x85' // リサイズしたいサイズ
+                ),
+                'default_url' => 'noimage.gif' // デフォルト画像をwebroot/imgから読み込む
+            )
+        )
+    );
+
+/**
+ * パスワードのハッシュ化
+ */
 	public function beforeSave($options = array()){
 		if(isset($this->data[$this->alias]['password'])){
 			$passwordHasher = new SimplePasswordHasher();
@@ -47,6 +64,8 @@ class User extends AppModel{
 		}
 		return true;
 	}
+
+
 
 }
 
