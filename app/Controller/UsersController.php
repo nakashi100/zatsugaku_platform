@@ -13,7 +13,21 @@ class UsersController extends AppController{
 
 	public function beforeFilter(){
 		parent::beforeFilter();
-		$this->Auth->allow('signup'); // ユーザー自身による登録とログアウトを許可する
+		$this->Auth->allow('view', 'login', 'logout', 'signup'); // 全てのユーザーがアクセス可能
+	}
+
+/**
+ * 権限設定
+ */
+	public function isAuthorized($user = null){
+		// オーナーのみ可能
+		if(in_array($this->action, array('edit'))){
+			$userId = (int) $this->request->params['pass'][0];
+			if($userId == $user['id']){
+				return true;
+			}
+		}
+		return parent::isAuthorized($user);
 	}
 
 	public function view($id = null){

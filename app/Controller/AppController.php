@@ -43,6 +43,7 @@ class AppController extends Controller {
                     	'fields' => array('username' => 'email', 'password' => 'password')
                 	)
                 ),
+                'authorize' => array('Controller'), // 権限をログイン/未ログイン以上に細かくわけたいときに用い、合わせて各コントローラ内にisAuthorizedeで細かく設定する
                 //ログイン後の移動先
                 // 'loginRedirect' => array('controller' => 'articles', 'action' => 'index'),
                 //ログアウト後の移動先
@@ -54,9 +55,15 @@ class AppController extends Controller {
             )
     );
 
-	public function beforeFilter(){
-		$this->Auth->allow('index'); // 全てのコントローラのindexアクションでログインを必要としないように設定
+	public function isAuthorized($user = null) {
+        if ($user['del_flg'] == '0' && $user['role'] == '2') { // Adminは全ての権限を有する
+            return true;
+        } else {
+            return false;
+        }
+    }
 
+	public function beforeFilter(){
 		if($this->Auth->user()){
 			$loginUser = $this->Auth->user();
 			$this->set('loginUser', $loginUser);

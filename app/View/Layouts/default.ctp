@@ -76,11 +76,12 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 				<?php
 					if(isset($loginUser)){
 						echo '<p>'.$loginUser['nickname'].'</p>';
+						echo '<p>'.$this->Html->Link('マイページ', array('controller' => 'Users', 'action' => 'view', $loginUser['id'])).'</p>';
 						echo '<p>'.$this->Html->Link('お気に入り雑学', array('controller' => 'Articles', 'action' => 'index', '?' => array('favorites' => $loginUser['id']))).'</p>';
 						echo '<p>'.$this->Html->Link('ログアウト', array('controller' => 'Users', 'action' => 'logout')).'</p>';
 					}else{
-						echo '<p>'.$this->Html->Link('ユーザー登録', array('controller' => 'Users', 'action' => 'signup')).'</p>';
 						echo '<p>'.$this->Html->Link('ログイン', array('controller' => 'Users', 'action' => 'login')).'</p>';
+						echo '<p>'.$this->Html->Link('ユーザー登録', array('controller' => 'Users', 'action' => 'signup')).'</p>';
 					}
 				?>
 			</div>

@@ -25,6 +25,7 @@
 			'introduce',
 			array(
 				'label' => '紹介文',
+				'type' => 'textarea'
 			)
 		);
 
