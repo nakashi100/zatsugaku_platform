@@ -22,16 +22,18 @@
 		echo $this->Paginator->next(__('next').'>', array(), null, array('class' => 'next disabled'));
 	?>
 </div>
+<br />
 
 <?php
-	echo '<br />';
-	echo '<p>';
-	echo $this->Html->Link(
-			'ユーザー情報を編集する',
-				array(
-					'controller' => 'Users',
-					'action' => 'edit', $user['User']['id']
-					)
-		);
-	echo '</p>';
+	if( isset($loginUser) && ($user['User']['id'] == $loginUser['id'] || $loginUser['role'] == '2') ){
+		echo '<p>';
+		echo $this->Html->Link(
+				'ユーザー情報を編集する',
+					array(
+						'controller' => 'Users',
+						'action' => 'edit', $user['User']['id']
+						)
+			);
+		echo '</p>';
+	}
 ?>

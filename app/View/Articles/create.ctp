@@ -31,6 +31,7 @@
 			'detail',
 			array(
 				'label' => '詳細',
+				'type' => 'textarea',
 				'placeholder' => '詳細を入力してください'
 			)
 		);
