@@ -39,25 +39,36 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 <body>
 	<div id="container">
 		<div id="header">
-			<p align="center">雑学プラットフォーム</p>
+			<div class="header__search">
+				<form method="get">
+					<input type="text" name="search" style="width:150px" placeholder="気になるワードを検索">
+				</form>
+			</div>
 
-			<form method="get">
-				<input type="text" name="search" style="width:150px" placeholder="検索">
-			</form>
-		</div>
+			<h1 class="header__title">雑学Platform</h1>
+
+			<div class="header__right">
+				<?php if(isset($loginUser)): ?>
+					 <p class="header__right__login"><?php echo $loginUser['nickname']; ?></p>
+				<?php else: ?>
+					<p class="header__right__login"><?php echo $this->Html->Link('無料会員登録', array('controller' => 'Users', 'action' => 'signup')); ?></p>
+					<p class="header__right__login"><?php echo $this->Html->Link('ログイン', array('controller' => 'Users', 'action' => 'login')); ?></p>
+				<?php endif; ?>
+			</div>
+		</div>  <!-- id="header"閉じ -->
 
 		<div id="content">
 
 			<div class="leftColumn">
 
-				<p><?php echo $this->Html->Link('ALL',
+				<p class="leftColum__category"><?php echo $this->Html->Link('ALL',
 										array(
 											'controller' => 'Articles',
 											'action' => 'index',
 										)
 									); ?></p>
 				<?php foreach($categories as $category): ?>
-					<p><?php echo $this->Html->Link($category['Category']['category_name'],
+					<p class="leftColum__category"><?php echo $this->Html->Link($category['Category']['category_name'],
 										array(
 											'controller' => 'Articles',
 											'action' => 'index',
@@ -82,13 +93,12 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 						echo '<p>'.$this->Html->Link('ログアウト', array('controller' => 'Users', 'action' => 'logout')).'</p>';
 					}else{
 						echo '<p>'.$this->Html->Link('ログイン', array('controller' => 'Users', 'action' => 'login')).'</p>';
-						echo '<p>'.$this->Html->Link('ユーザー登録', array('controller' => 'Users', 'action' => 'signup')).'</p>';
+						echo '<p>'.$this->Html->Link('無料会員登録', array('controller' => 'Users', 'action' => 'signup')).'</p>';
 					}
 				?>
 			</div>
 
 		</div>
-
 
 		<div id="footer">
 <!-- 			<?php echo $this->Html->link(
@@ -99,6 +109,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 			?> -->
 			<p align="center">フッターだよ</p>
 		</div>
+
 	</div>
 	<?php // echo $this->element('sql_dump'); ?>
 </body>

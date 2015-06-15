@@ -18,3 +18,79 @@
 	width:11%;
 	padding:10px 1.5%;
 }
+
+/*
+* ヘッダー
+*/
+#container{
+	width: 1200px;
+	margin-right: auto; /* 中央寄せ */
+	margin-left: auto;
+}
+
+#header{
+	position: relative;
+	height: 70px;
+	background-color: black;
+}
+
+
+
+.header__search input{
+	position: absolute;
+	top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto 20px;
+    font-size: 12px;
+    height: 10px;
+    padding: 8px 20px 8px 8px;
+}
+
+.header__title {
+	position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    width: 30%;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    font-size: 18px;
+    color: white;
+    background-color: green;
+}
+
+.header__right{
+	float: right;
+	margin-right: 10px;
+	line-height:70px;
+}
+
+.header__right__login {
+	display: inline;
+	margin-right: 20px;
+	font-size: 14px;
+}
+
+.header__right__login > a{
+	color: white;
+}
+
+.leftColum__category{
+	margin-bottom: 0;
+	height: 40px;
+}
+
+.leftColum__category > a{
+	text-decoration:none;
+	line-height: 40px;
+	display: block;
+}
+
+.leftColum__category > a:hover{
+	background-color: blue;
+	color: white;
