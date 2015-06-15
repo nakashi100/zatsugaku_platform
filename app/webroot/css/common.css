@@ -19,9 +19,9 @@
 	padding:10px 1.5%;
 }
 
-/*
-* ヘッダー
-*/
+/*************************
+* 共通部分
+**************************/
 #container{
 	width: 1200px;
 	margin-right: auto; /* 中央寄せ */
@@ -92,5 +92,50 @@
 }
 
 .leftColum__category > a:hover{
-	background-color: blue;
+	background: blue;
 	color: white;
+}
+
+/*************************
+* Article
+**************************/
+.article-top{
+	border-bottom: 2px solid black;
+	padding: 10px 0;
+}
+
+.article-top > h2{
+	color: black;
+	font-size: 22px;
+	display: inline;
+}
+
+.article-top > p{
+	display: inline;
+	font-size: 18px;
+}
+
+.article-sort{
+	margin: 15px 0;
+}
+
+.article-sort__new, .article-sort__popular{
+	float: left;
+	width: 100px;
+	border: 1px solid black;
+	padding-left: 5px; 
+}
+
+.article-sort__new > a, .article-sort__popular > a{
+	display:block;
+	font-weight: normal;
+}
+
+.article-sort__new > a:hover, .article-sort__popular > a:hover{
+	text-decoration: none;
+}
+
+/*.article-sort > a{
+	width: 100px;
+	background: black;
+}*/
