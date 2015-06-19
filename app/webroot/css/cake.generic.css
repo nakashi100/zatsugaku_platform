@@ -310,7 +310,7 @@ form .required label:after {
 form div.submit {
 	border: 0;
 	clear: both;
-	margin-top: 10px;
+	/*margin-top: 10px;*/
 }
 label {
 	display: block;
