@@ -44,6 +44,15 @@
 			)
 		);
 
-	echo $this->Form->end('編集する');
+	echo $this->Form->end('編集を完了する');
+
+	
+	echo '<p>';
+		echo $this->Form->postLink(
+				'雑学を削除する',
+					array('action' => 'delete', $article_id),
+					array('confirm' => '本当に削除してよろしいですか？')
+			);
+	echo '</p>';
 
 ?>

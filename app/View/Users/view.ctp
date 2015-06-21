@@ -28,7 +28,19 @@
 
 		foreach($articles as $article){
 			echo '<div class="user-bottom__article">';
-			echo $this->Html->Link($article['Article']['title'], array('controller' => 'Articles', 'action' => 'detail', $article['Article']['id'])); // とりあえずタイトルのみ表示⇒あとで変更する
+				echo $this->Html->Link($article['Article']['title'], array('controller' => 'Articles', 'action' => 'detail', $article['Article']['id'])); // とりあえずタイトルのみ表示⇒あとで変更する
+
+				if( isset($loginUser) && ($article['Article']['user_id'] == $loginUser['id'] || $loginUser && $loginUser['role'] == '2') ){
+						echo '<span class="user-bottom__article__edit">';
+						echo $this->Html->Link(
+								'編集する',
+									array(
+										'controller' => 'Articles',
+										'action' => 'edit', $article['Article']['id']
+										)
+							);
+						echo '</span>';
+				}
 			echo '</div>';
 		}
 	echo '</div>';

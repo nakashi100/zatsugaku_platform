@@ -64,21 +64,85 @@
     background-color: green;
 }
 
-.header__right{
+.header__dropdownmenu{
 	float: right;
-	margin-right: 10px;
-	line-height:70px;
+/*	width: 150px;
+	height: 40px;*/
+	margin: 15px 20px;
 }
 
-.header__right__login {
-	display: inline;
-	margin-right: 20px;
-	font-size: 14px;
+.header__dropdownmenu ul{
+  margin:0;
+  padding:0;
 }
 
-.header__right__login > a{
-	color: white;
+.header__dropdownmenu ul li {
+  list-style: none;
+  margin:0;
+  padding:0;
+  font-size:14px;
+  float: left;
+  position: relative;
+  width: 120px;/*親メニューの幅*/
+  height: 40px;/*親メニューの高さ*/
+  line-height: 40px;
+  background:#FF818D;/*親メニューの背景色*/
+  color: #4D4D4D;/*親メニューの文字色*/
+  text-align:center;
+  font-weight:bold;
 }
+
+.header__dropdownmenu ul li a {
+  color: #4D4D4D;
+  display: block;
+  text-decoration: none;
+}
+
+.header__dropdownmenu ul li:hover, .header__dropdownmenu ul li a:hover {
+  background:#EA2839;/*ホバー時の親メニューの背景色*/
+  color:#fff;/*ホバー時の親メニューの文字色*/
+}
+
+.header__dropdownmenu ul li ul {
+  position: absolute;
+  top: 40px;/*親メニューの高さと同じにする*/
+  width: 120px;
+  z-index: 100;
+}
+
+.header__dropdownmenu ul li ul li {
+  visibility: hidden;
+  overflow: hidden;
+  width: 100px;/*サブメニューの幅*/
+  height: 0;
+  background:#FFDAD7;/*サブメニューの背景色*/
+  font-weight: normal;
+  font-size: 12px;
+  text-align: left;
+  padding-left: 20px;
+}
+
+.header__dropdownmenu ul li ul li:hover, .header__dropdownmenu ul li ul li a:hover {
+  background:#FFAFA9;/*ホバー時のサブメニューの背景色*/
+}
+
+.header__dropdownmenu ul li:hover ul li, .header__dropdownmenu ul li a:hover ul li{
+  visibility: visible;
+  overflow: visible;
+  height:40px;/*サブメニューの高さ*/
+  z-index: 10;
+}
+
+
+
+
+
+
+
+
+
+
+
 
 .leftColum__category{
 	margin-bottom: 0;
@@ -273,12 +337,19 @@
 	display:inline;
 }
 
-.user-bottom__article > a{
+.user-bottom__article {
 	display: block;
 	height: 20px;
 	font-size: 16px;
 	margin: 10px;
 	border-bottom: 1px solid;
+}
+
+.user-bottom__article__edit{
+	float: right;
+	margin-right: 10px;
+	font-size: 8px;
+	color: blue;
 }
 
 .article-detail-title-left{

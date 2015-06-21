@@ -47,14 +47,25 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 
 			<h1 class="header__title">雑学Platform</h1>
 
-			<div class="header__right">
-				<?php if(isset($loginUser)): ?>
-					 <p class="header__right__login"><?php echo $loginUser['nickname']; ?></p>
-				<?php else: ?>
-					<p class="header__right__login"><?php echo $this->Html->Link('無料会員登録', array('controller' => 'Users', 'action' => 'signup')); ?></p>
-					<p class="header__right__login"><?php echo $this->Html->Link('ログイン', array('controller' => 'Users', 'action' => 'login')); ?></p>
-				<?php endif; ?>
+			<div class="header__dropdownmenu">
+				<ul>
+					<?php if(isset($loginUser)): ?>
+							<li><a href="#"><?php echo $loginUser['nickname']; ?></a>
+								<ul>
+									<li><?php echo $this->Html->Link('マイページ', array('controller' => 'Users', 'action' => 'view', $loginUser['id'])); ?></li>
+									<li><?php echo $this->Html->Link('雑学を投稿する', array('controller' => 'Articles', 'action' => 'create')); ?></li>
+									<li><?php echo $this->Html->Link('お気に入り雑学', array('controller' => 'Articles', 'action' => 'index', '?' => array('favorites' => $loginUser['id']))); ?></li>
+									<li><?php echo $this->Html->Link('ログアウト', array('controller' => 'Users', 'action' => 'logout')); ?></li>
+								</ul>
+							</li>
+					<?php else: ?>
+							<li><a href="#"><?php echo $this->Html->Link('無料会員登録', array('controller' => 'Users', 'action' => 'signup')); ?></a></li>
+							<li><a href="#"><?php echo $this->Html->Link('ログイン', array('controller' => 'Users', 'action' => 'login')); ?></a></li>
+					<?php endif; ?>
+				</ul>
 			</div>
+
+
 		</div>  <!-- id="header"閉じ -->
 
 		<div id="content">
@@ -84,29 +95,11 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 			</div>
 
 			<div class="rightColumn">
-				<?php
-					if(isset($loginUser)){
-						echo '<p>'.$loginUser['nickname'].'</p>';
-						echo '<p>'.$this->Html->Link('マイページ', array('controller' => 'Users', 'action' => 'view', $loginUser['id'])).'</p>';
-						echo '<p>'.$this->Html->Link('雑学を投稿する', array('controller' => 'Articles', 'action' => 'create')).'</p>';
-						echo '<p>'.$this->Html->Link('お気に入り雑学', array('controller' => 'Articles', 'action' => 'index', '?' => array('favorites' => $loginUser['id']))).'</p>';
-						echo '<p>'.$this->Html->Link('ログアウト', array('controller' => 'Users', 'action' => 'logout')).'</p>';
-					}else{
-						echo '<p>'.$this->Html->Link('ログイン', array('controller' => 'Users', 'action' => 'login')).'</p>';
-						echo '<p>'.$this->Html->Link('無料会員登録', array('controller' => 'Users', 'action' => 'signup')).'</p>';
-					}
-				?>
 			</div>
 
 		</div>
 
 		<div id="footer">
-<!-- 			<?php echo $this->Html->link(
-					$this->Html->image('cake.power.gif', array('alt' => $cakeDescription, 'border' => '0')),
-					'http://www.cakephp.org/',
-					array('target' => '_blank', 'escape' => false, 'id' => 'cake-powered')
-				);
-			?> -->
 			<p align="center">フッターだよ</p>
 		</div>
 

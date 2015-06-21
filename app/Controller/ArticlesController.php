@@ -180,6 +180,7 @@ class ArticlesController extends AppController{
 		// editページにアクセスした際にフォームにデータをセットしておく
 		if(!$this->request->data){
 			$this->request->data = $article;
+			$this->set('article_id', $id);
 		}
 
 		//編集ボタンが押された場合に、DBへの保存処理を行う

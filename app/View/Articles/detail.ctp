@@ -99,28 +99,3 @@
 		}
 	?>
 </div> <!-- article-detail-comment -->
-
-<div>
-<?php
-	if( isset($loginUser) && ($article['Article']['user_id'] == $loginUser['id'] || $loginUser && $loginUser['role'] == '2') ){
-		echo '<p>';
-		echo $this->Html->Link(
-				'雑学を編集する',
-					array(
-						'controller' => 'Articles',
-						'action' => 'edit', $article_id
-						)
-			);
-		echo '</p>';
-
-		echo '<p>';
-		echo $this->Form->postLink(
-				'雑学を削除する',
-					array('action' => 'delete', $article_id),
-					array('confirm' => '本当に削除してよろしいですか？')
-			);
-		echo '</p>';
-	}
-
-?>
-</div>
