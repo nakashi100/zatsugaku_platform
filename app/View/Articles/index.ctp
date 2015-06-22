@@ -9,8 +9,14 @@
 </div>
 
 <div class="article-sort">
-	<div class="article-sort__new"><?php echo $this->Html->Link('新着順', array('controller' => 'Articles', 'action' => 'index', '?' => array('category_id' => $category_id, 'sort' => 1))); ?></div>
-	<div class="article-sort__popular"><?php echo $this->Html->Link('人気順', array('controller' => 'Articles', 'action' => 'index', '?' => array('category_id' => $category_id, 'sort' => 2))); ?></div>
+	<ul>
+		<?php if($sort_flag == 1){ echo '<li class="active">'; }else{ echo '<li>'; } ?>
+			<?php echo $this->Html->Link('新着順', array('controller' => 'Articles', 'action' => 'index', '?' => array('category_id' => $category_id, 'sort' => 1))); ?>
+		</li>
+		<?php if($sort_flag == 1){ echo '<li>'; }else{ echo '<li class="active">'; } ?>
+			<?php echo $this->Html->Link('人気順', array('controller' => 'Articles', 'action' => 'index', '?' => array('category_id' => $category_id, 'sort' => 2))); ?>
+		</li>
+	</ul>
 </div>
 
 <div class="article-contents">
@@ -20,8 +26,8 @@
 					echo '<div class="article-contents__cel">';
 						echo '<div class="article-contents__cel__left">';
 							echo '<p class="article-contents__cel__category">'.$article['Category']['category_name'].'</p>'; // カテゴリ
-							echo '<p class="article-contents__cel__view">'.$article['Article']['view'].'</p>'; // View数
-							echo '<p class="article-contents__cel__likes">'.count($article['Like']).'</p>'; // へぇ数
+							echo '<p class="article-contents__cel__view">'.$article['Article']['view'].'<span>view</span></p>'; // View数
+							echo '<p class="article-contents__cel__likes">'.count($article['Like']).'<span>へぇ</span></p>'; // へぇ数
 						echo '</div>';
 
 						echo '<div class="article-contents__cel__right">';
@@ -35,7 +41,7 @@
 		?>
 </div>
 
-<!-- <?php echo $this->Paginator->counter(array('format' => 'TOTAL:{:count} | SHOWING:{:current} | PAGE:{:page}/{:pages}')); ?>-->
+ <?php // echo $this->Paginator->counter(array('format' => 'TOTAL:{:count} | SHOWING:{:current} | PAGE:{:page}/{:pages}')); ?>
 
 <div class="paging">
 	<?php
@@ -48,6 +54,9 @@
 
 
 <?php
+	echo $this->Html->script('script');
+
+
 // echo ini_get('upload_max_filesize');
 //   echo ini_get('post_max_size');
 //   echo ini_get('memory_limit');

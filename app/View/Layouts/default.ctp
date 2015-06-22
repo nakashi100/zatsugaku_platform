@@ -26,6 +26,8 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		<?php echo $title_for_layout; ?>
 	</title>
 	<?php
+		echo $this->Html->script( '//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js');
+		
 		echo $this->Html->meta('icon');
 
 		echo $this->Html->css('cake.generic');
@@ -45,7 +47,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 				</form>
 			</div>
 
-			<h1 class="header__title">雑学Platform</h1>
+			<h1 class="header__title"><?php echo $this->Html->Link('雑学Platform', array('controller' => 'Articles', 'action' => 'index')); ?></h1>
 
 			<div class="header__dropdownmenu">
 				<ul>

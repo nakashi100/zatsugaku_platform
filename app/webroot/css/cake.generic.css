@@ -23,7 +23,7 @@
 
 /** General Style Info **/
 body {
-	background: purple;
+	background: #f1f0e6;
 	color: #fff;
 	font-family:'lucida grande',verdana,helvetica,arial,sans-serif;
 	font-size:90%;
@@ -109,7 +109,7 @@ p {
 #footer {
 	clear: both;
 	padding: 6px 10px;
-	background-color: black;
+	background-color: #554738;
 }
 /*#header a, #footer a {
 	color: #fff;
@@ -200,6 +200,7 @@ table td.actions a {
 	color: #ccc;
 	margin-top: 1em;
 	clear:both;
+	text-align: center;
 }
 .paging .current,
 .paging .disabled,
@@ -211,21 +212,24 @@ table td.actions a {
 .paging > span {
 	display: inline-block;
 	border: 1px solid #ccc;
-	border-left: 0;
+	/*border-left: 0;*/
+	margin: auto 5px;
 }
 .paging > span:hover {
 	background: #efefef;
 }
 .paging .prev {
-	border-left: 1px solid #ccc;
+/*	border-left: 1px solid #ccc;
 	-moz-border-radius: 4px 0 0 4px;
 	-webkit-border-radius: 4px 0 0 4px;
-	border-radius: 4px 0 0 4px;
+	border-radius: 4px 0 0 4px;*/
+	border: none;
 }
 .paging .next {
-	-moz-border-radius: 0 4px 4px 0;
+/*	-moz-border-radius: 0 4px 4px 0;
 	-webkit-border-radius: 0 4px 4px 0;
-	border-radius: 0 4px 4px 0;
+	border-radius: 0 4px 4px 0;*/
+	border: none;
 }
 .paging .disabled {
 	color: #ddd;
@@ -316,10 +320,11 @@ label {
 	display: block;
 	font-size: 110%;
 	margin-bottom:3px;
+	font-weight: bold;
 }
 input, textarea {
 	clear: both;
-	font-size: 140%;
+	font-size: 110%;
 	font-family: "frutiger linotype", "lucida grande", "verdana", sans-serif;
 	padding: 1%;
 	width:98%;
@@ -363,13 +368,13 @@ input[type=submit] {
 }
 form .submit input[type=submit] {
 	background:#62af56;
-	background-image: -webkit-gradient(linear, left top, left bottom, from(#76BF6B), to(#3B8230));
-	background-image: -webkit-linear-gradient(top, #76BF6B, #3B8230);
-	background-image: -moz-linear-gradient(top, #76BF6B, #3B8230);
-	border-color: #2d6324;
+	/*background-image: -webkit-gradient(linear, left top, left bottom, from(#76BF6B), to(#3B8230));*/
+	/*background-image: -webkit-linear-gradient(top, #76BF6B, #3B8230);*/
+	/*background-image: -moz-linear-gradient(top, #76BF6B, #3B8230);*/
+	/*border-color: #2d6324;*/
 	color: #fff;
 	text-shadow: rgba(0, 0, 0, 0.5) 0px -1px 0px;
-	padding: 8px 10px;
+	padding: 4px 30px;
 }
 form .submit input[type=submit]:hover {
 	background: #5BA150;

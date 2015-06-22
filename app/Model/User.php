@@ -47,7 +47,7 @@ class User extends AppModel{
             'img' => array( // ここでは、"_file_name"を除いたカラム名を書く
                 'quality' => 95, // 画質指定 デフォルトでは75
                 'styles' => array(
-                    'thumb' => '85x85' // リサイズしたいサイズ
+                    'thumb' => '100x100' // リサイズしたいサイズ
                 ),
                 'default_url' => 'noimage.gif' // デフォルト画像をwebroot/imgから読み込む
             )
