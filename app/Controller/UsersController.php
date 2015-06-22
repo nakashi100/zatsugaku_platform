@@ -1,7 +1,7 @@
 <?php
 
 class UsersController extends AppController{
-	public $uses = array('User', 'Article'); // Controlle内で他のModel(table)を利用できるようにする
+	public $uses = array('User', 'Article', 'Favorite'); // Controlle内で他のModel(table)を利用できるようにする
 	public $helpers = array('Html', 'Form', 'Session', 'UploadPack.Upload'); // viewの拡張機能を呼び出す
 	public $components = array('Session', 'Paginator'); // Controllerの拡張機能を呼び出す
 	public $paginate = array(
@@ -30,7 +30,7 @@ class UsersController extends AppController{
 		return parent::isAuthorized($user);
 	}
 
-	public function view($id = null){
+	public function view($id = null, $favorites = null){
 		if(!$id){
 			throw new NotFoundException(__('このページは存在しません'));
 		}
@@ -46,6 +46,16 @@ class UsersController extends AppController{
 		$this->Paginator->settings = $this->paginate;
 		$articles = $this->Paginator->paginate('Article', array('Article.user_id' => $id, 'Article.del_flg' => '0'));
 		$this->set('articles', $articles);
+
+		if($favorites && $favorites == 1){
+			// $category_id = 0;
+			$user_id = $id;
+
+			$article_id_list = $this->Favorite->find('list', array('fields' => 'Favorite.article_id', 'conditions' => array('Favorite.user_id' => $user_id)));
+
+			$articles = $this->Paginator->paginate('Article', array('Article.del_flg' => '0', 'Article.id' => array_values($article_id_list)));
+			$this->set('articles', $articles);
+		}
 	}
 
 	public function edit($id = null){

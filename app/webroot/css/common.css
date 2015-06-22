@@ -201,27 +201,14 @@
 
 .user-bottom{
 	clear: both;
-	/*margin-top: 20px;*/
-	margin: 30px 10px 10px 10px;
+	margin-top: 30px;
 }
 
 .user-bottom__post{
 	font-size: 16px;
 	color: black;
-	padding: 5px;
-	display:inline;
-}
-
-.user-bottom__postCount{
-	display:inline;
-}
-
-.user-bottom__article {
-	display: block;
-	height: 20px;
-	font-size: 16px;
-	margin: 10px;
-	border-bottom: 1px solid;
+	/*padding: 5px;*/
+	margin-bottom: -40px;
 }
 
 .user-bottom__article__edit{
