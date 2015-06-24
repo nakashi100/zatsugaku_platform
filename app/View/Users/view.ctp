@@ -22,14 +22,16 @@
 	echo '</div>';
 
 	echo '<div class="user-bottom">';
-		echo '<h3 class="user-bottom__post">';
-			echo '投稿した雑学'.'<span class="user-bottom__postCount">'.$this->Paginator->counter(array('format' => '({:count}件)')).'</span>';
+		echo '<ul class="user-bottom__post">';
+			if(isset($favorites_flag) && $favorites_flag == 1){
+				echo '<li>'.$this->Html->Link('投稿した雑学'.' ('.$count_articles.'件) ', array('controller' => 'Users', 'action' => 'view', $user['User']['id'])).'</li>';
+				echo '<li class="active">'.$this->Html->Link('お気に入り雑学'.' ('.$count_favorite_articles.'件) ', array('controller' => 'Users', 'action' => 'view', $user['User']['id'], 1)).'</li>';
+			}else{
+				echo '<li class="active">'.$this->Html->Link('投稿した雑学'.' ('.$count_articles.'件) ', array('controller' => 'Users', 'action' => 'view', $user['User']['id'])).'</li>';
+				echo '<li>'.$this->Html->Link('お気に入り雑学'.' ('.$count_favorite_articles.'件) ', array('controller' => 'Users', 'action' => 'view', $user['User']['id'], 1)).'</li>';
+			}
 
-			
-			echo '<span>'.$this->Html->Link('てすとてすとてすと(お気に入り雑学●●件)', array('controller' => 'Users', 'action' => 'view', $user['User']['id'], 1)).'</span>';
-// '?' => array('favorites' => $loginUser['id'])
-
-		echo '</h3>';
+		echo '</ul>';
 
 	/*****************************
 	*  ↓  article-indexから引用
@@ -80,5 +82,6 @@
 		echo $this->Paginator->next(__('next').'>', array(), null, array('class' => 'next disabled'));
 	?>
 </div>
+
 
 <?php // echo $this->Paginator->counter(array('format' => 'TOTAL:{:count} | SHOWING:{:current} | PAGE:{:page}/{:pages}')); ?>

@@ -5,9 +5,11 @@
 <div class="article-detail-title">
 	
 	<div class="article-detail-title-left">
-		<p class="article-detail-title-left__category"> <?php echo $article['Category']['category_name']; ?> </p>
-		<p class="article-detail-title-left__views">view数 <?php echo $article['Article']['view']; ?> </p>
-		<p class="article-detail-title-left__likes">へぇ数 <?php echo count($article['Like']); ?></p>
+		<ul>
+			<li><?php echo $article['Category']['category_name']; ?></li>
+			<li><?php echo $article['Article']['view']; ?><span>view</span></li>
+			<li><?php echo count($article['Like']); ?><span>へぇ</span></li>
+		</ul>
 	</div>
 
 	<div class="article-detail-title-right">
@@ -15,7 +17,7 @@
 		
 		<div class="article-detail-title-right__author">
 			<p><?php echo $this->Html->Link($article['User']['nickname'], array('controller' =>'Users', 'action' => 'view', $article['Article']['user_id'])); ?></p>
-			<p><?php echo date('Y年n月j日', strtotime($article['Article']['created'])); ?>更新</p>
+			<p><?php echo date('Y/n/j', strtotime($article['Article']['created'])); ?>更新</p>
 		</div>
 
 		<div class="article-detail-title-action">
@@ -24,14 +26,14 @@
 				////////////////  いいねの処理  ////////////////
 					if($like){ 
 							echo $this->Form->postLink(
-									'イイネを取り消す',
+									'「へぇ！」を取り消す',
 									array('action' => 'resetLike', $article['Article']['id'], $loginUser['id'])
 								);
 					}
 
 					if(!$like){
 							echo $this->Form->postLink(
-									'イイネする！',
+									'へぇ！なるほど♪',
 									array('action' => 'like', $article['Article']['id'], $loginUser['id'])
 								);
 					}
@@ -46,13 +48,13 @@
 
 						if(!$favorite){
 								echo $this->Form->postLink(
-										'お気に入りに登録する',
+										'お気に入りに追加',
 										array('action' => 'favorite', $article['Article']['id'], $loginUser['id'])
 									);
 						}
 				}
 			?>
-		</div>
+		</div> <!-- article-detail-title-action -->
 	</div> <!-- article-detail-title-right -->
 </div> <!-- article-detail-top -->
 
@@ -71,7 +73,7 @@
 						
 						echo '<div class="article-detail-comment__cel__right">';
 							echo $this->Html->Link(h($comment['User']['nickname']), array('controller' => 'Users', 'action' => 'view', $comment['Comment']['user_id']));
-							echo '<p>'.h($comment['Comment']['comment']).'</p>';
+							echo '<span>'.date('Y/n/j G:i', strtotime($comment['Comment']['created'])).'</span>';
 
 							if(isset($loginUser) && ($comment['Comment']['user_id'] == $loginUser['id'] || $loginUser['role'] == '2')){
 								echo $this->Form->postLink(
@@ -80,6 +82,7 @@
 									array('confirm' => '本当に削除してよろしいですか？')
 									);
 							}
+							echo '<p>'.h($comment['Comment']['comment']).'</p>';
 						echo '</div>';
 					echo '</div>';
 				}
@@ -94,7 +97,7 @@
 				echo $this->Form->input('comment', array('type' => 'detail', 'placeholder' => 'コメントを書く'));
 				echo $this->Form->input('article_id', array('type' => 'hidden', 'value' => $article_id));
 				echo $this->Form->input('user_id', array('type' => 'hidden', 'value' => $loginUser['id']));
-				echo $this->Form->end('投稿');
+				echo $this->Form->end('投稿', array('class' => 'test'));
 			echo '</div>';
 		}
 	?>

@@ -56,7 +56,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 								<ul>
 									<li><?php echo $this->Html->Link('マイページ', array('controller' => 'Users', 'action' => 'view', $loginUser['id'])); ?></li>
 									<li><?php echo $this->Html->Link('雑学を投稿する', array('controller' => 'Articles', 'action' => 'create')); ?></li>
-									<li><?php echo $this->Html->Link('お気に入り雑学', array('controller' => 'Articles', 'action' => 'index', '?' => array('favorites' => $loginUser['id']))); ?></li>
+									<li><?php echo $this->Html->Link('お気に入り雑学', array('controller' => 'Users', 'action' => 'view', $loginUser['id'], 1)); ?></li>
 									<li><?php echo $this->Html->Link('ログアウト', array('controller' => 'Users', 'action' => 'logout')); ?></li>
 								</ul>
 							</li>

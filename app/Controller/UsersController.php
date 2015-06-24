@@ -43,19 +43,28 @@ class UsersController extends AppController{
 		$this->set('user', $user);
 
 		// 該当ユーザーの投稿した雑学一覧をpaginateした上でviewに渡す
-		$this->Paginator->settings = $this->paginate;
-		$articles = $this->Paginator->paginate('Article', array('Article.user_id' => $id, 'Article.del_flg' => '0'));
-		$this->set('articles', $articles);
-
-		if($favorites && $favorites == 1){
-			// $category_id = 0;
-			$user_id = $id;
-
-			$article_id_list = $this->Favorite->find('list', array('fields' => 'Favorite.article_id', 'conditions' => array('Favorite.user_id' => $user_id)));
-
-			$articles = $this->Paginator->paginate('Article', array('Article.del_flg' => '0', 'Article.id' => array_values($article_id_list)));
+		if(!$favorites){
+			$this->Paginator->settings = $this->paginate;
+			$articles = $this->Paginator->paginate('Article', array('Article.user_id' => $id, 'Article.del_flg' => '0'));
 			$this->set('articles', $articles);
 		}
+
+		// お気に入りした雑学一覧をpaginateした上でviewに渡す
+		if(isset($favorites) && $favorites == 1){
+			$this->Paginator->settings = $this->paginate;
+			$article_id_list = $this->Favorite->find('list', array('fields' => 'Favorite.article_id', 'conditions' => array('Favorite.user_id' => $id)));
+			$articles = $this->Paginator->paginate('Article', array('Article.del_flg' => '0', 'Article.id' => array_values($article_id_list)));
+			$this->set('articles', $articles);
+			$this->set('favorites_flag', 1);
+		}
+
+		// 投稿した雑学の数をviewに渡す
+		$count_articles = $this->Article->find('count', array('conditions' => array('Article.user_id' => $id, 'Article.del_flg' => '0')));
+		$this->set('count_articles', $count_articles);
+
+		// お気に入りした雑学の数をviewに渡す
+		$count_favorite_articles = $this->Favorite->find('count', array('conditions' => array('Favorite.user_id' => $id, 'Article.del_flg' => '0')));
+		$this->set('count_favorite_articles', $count_favorite_articles);
 	}
 
 	public function edit($id = null){
