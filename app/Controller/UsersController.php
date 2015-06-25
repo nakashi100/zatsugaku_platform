@@ -69,6 +69,7 @@ class UsersController extends AppController{
 
 	public function edit($id = null){
 		$user = $this->User->findById($id);
+		$this->set('user', $user);
 
 		if(!$id || !$user){
 			throw new NotFoundException(__('このページは存在しません'));

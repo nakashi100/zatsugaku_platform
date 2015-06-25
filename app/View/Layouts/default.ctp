@@ -61,8 +61,8 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 								</ul>
 							</li>
 					<?php else: ?>
-							<li><a href="#"><?php echo $this->Html->Link('無料会員登録', array('controller' => 'Users', 'action' => 'signup')); ?></a></li>
-							<li><a href="#"><?php echo $this->Html->Link('ログイン', array('controller' => 'Users', 'action' => 'login')); ?></a></li>
+							<li><?php echo $this->Html->Link('無料会員登録', array('controller' => 'Users', 'action' => 'signup')); ?></li>
+							<li><?php echo $this->Html->Link('ログイン', array('controller' => 'Users', 'action' => 'login')); ?></li>
 					<?php endif; ?>
 				</ul>
 			</div>
