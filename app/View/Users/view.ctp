@@ -38,7 +38,7 @@
 	******************************/
 		echo '<div class="article-contents">';
 			foreach($articles as $article){
-				if($article['Article']['del_flg'] != 1){
+				if($article['Article']['del_flg'] == 0){
 					echo '<div class="article-contents__cel">';
 						echo '<div class="article-contents__cel__left">';
 							echo '<p class="article-contents__cel__category">'.$article['Category']['category_name'].'</p>'; // カテゴリ

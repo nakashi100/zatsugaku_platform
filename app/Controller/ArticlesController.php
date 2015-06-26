@@ -161,12 +161,31 @@ class ArticlesController extends AppController{
 
 	public function create(){
 		if($this->request->is('post')){
-			if($this->Article->save($this->request->data)){
+			if(isset($this->request->data['post'])){
+				$this->Article->save($this->request->data);
 				$this->Session->setFlash(__('あなたの雑学が投稿されました'));
 				return $this->redirect(array('action' => 'index'));
 			}
-			$this->Session->setFlash(__('雑学の投稿に失敗しました'));
+			elseif(isset($this->request->data['save'])){
+				$save_data = $this->request->data;
+				$save_data['Article']['del_flg'] = '2'; // 下書きの場合はdel_flgを2に変更する
+				$this->Article->save($save_data); // DBに保存
+				$this->Session->setFlash(__('編集中の雑学が下書きに保存されました'));
+				return $this->redirect(array('controller' => 'Users', 'action' => 'view', $save_data['Article']['user_id']));
+			}else{
+				$this->Session->setFlash(__('雑学の編集に失敗しました'));
+			}
 		}
+
+
+// $data = array('Article' => array('id' => $id, 'del_flg' => '1')); // 更新する内容を設定
+// 		$fields = array('del_flg'); // 更新する項目(フィールド指定)
+// 		if($this->Article->save($data, false, $fields)){
+// 			$this->Session->setFlash(__('この雑学(id=%s)は削除されました', h($id)));
+// 			return $this->redirect(array('action' => 'index'));
+// 		}
+
+
 	}
 
 	public function edit($id = null){
