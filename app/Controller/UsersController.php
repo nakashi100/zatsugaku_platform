@@ -1,7 +1,7 @@
 <?php
 
 class UsersController extends AppController{
-	public $uses = array('User', 'Article'); // Controlle内で他のModel(table)を利用できるようにする
+	public $uses = array('User', 'Article', 'Favorite'); // Controlle内で他のModel(table)を利用できるようにする
 	public $helpers = array('Html', 'Form', 'Session', 'UploadPack.Upload'); // viewの拡張機能を呼び出す
 	public $components = array('Session', 'Paginator'); // Controllerの拡張機能を呼び出す
 	public $paginate = array(
@@ -30,7 +30,7 @@ class UsersController extends AppController{
 		return parent::isAuthorized($user);
 	}
 
-	public function view($id = null){
+	public function view($id = null, $favorites = null){
 		if(!$id){
 			throw new NotFoundException(__('このページは存在しません'));
 		}
@@ -43,13 +43,33 @@ class UsersController extends AppController{
 		$this->set('user', $user);
 
 		// 該当ユーザーの投稿した雑学一覧をpaginateした上でviewに渡す
-		$this->Paginator->settings = $this->paginate;
-		$articles = $this->Paginator->paginate('Article', array('Article.user_id' => $id, 'Article.del_flg' => '0'));
-		$this->set('articles', $articles);
+		if(!$favorites){
+			$this->Paginator->settings = $this->paginate;
+			$articles = $this->Paginator->paginate('Article', array('Article.user_id' => $id, 'Article.del_flg' => '0'));
+			$this->set('articles', $articles);
+		}
+
+		// お気に入りした雑学一覧をpaginateした上でviewに渡す
+		if(isset($favorites) && $favorites == 1){
+			$this->Paginator->settings = $this->paginate;
+			$article_id_list = $this->Favorite->find('list', array('fields' => 'Favorite.article_id', 'conditions' => array('Favorite.user_id' => $id)));
+			$articles = $this->Paginator->paginate('Article', array('Article.del_flg' => '0', 'Article.id' => array_values($article_id_list)));
+			$this->set('articles', $articles);
+			$this->set('favorites_flag', 1);
+		}
+
+		// 投稿した雑学の数をviewに渡す
+		$count_articles = $this->Article->find('count', array('conditions' => array('Article.user_id' => $id, 'Article.del_flg' => '0')));
+		$this->set('count_articles', $count_articles);
+
+		// お気に入りした雑学の数をviewに渡す
+		$count_favorite_articles = $this->Favorite->find('count', array('conditions' => array('Favorite.user_id' => $id, 'Article.del_flg' => '0')));
+		$this->set('count_favorite_articles', $count_favorite_articles);
 	}
 
 	public function edit($id = null){
 		$user = $this->User->findById($id);
+		$this->set('user', $user);
 
 		if(!$id || !$user){
 			throw new NotFoundException(__('このページは存在しません'));

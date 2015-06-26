@@ -67,10 +67,12 @@ class ArticlesController extends AppController{
 		///////////  ソート内容によってページネーションの設定を変更する　///////////
 		if( ($this->request->query('sort') == 1) || !($this->request->query('sort')) ){
 			$this->Paginator->settings = $this->paginate_new;
+			$this->set('sort_flag', 1);
 		}
 
 		if($this->request->query('sort') == 2){
 			$this->Paginator->settings = $this->paginate_likes;
+			$this->set('sort_flag', 2);
 		}
 
 		///////////			カテゴリ指定・検索内容の有無			///////////
@@ -180,6 +182,7 @@ class ArticlesController extends AppController{
 		// editページにアクセスした際にフォームにデータをセットしておく
 		if(!$this->request->data){
 			$this->request->data = $article;
+			$this->set('article_id', $id);
 		}
 
 		//編集ボタンが押された場合に、DBへの保存処理を行う
