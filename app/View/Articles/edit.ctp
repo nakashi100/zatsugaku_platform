@@ -41,19 +41,32 @@
 		echo $this->Form->input(
 				'user_id',
 				array(
-					'type' => 'hidden',
+					'type' => 'hidden', // Adminが編集する場合もあるためloginUser['id']は渡さない
 				)
 			);
 
-		echo $this->Form->end('編集を完了する');
+		echo $this->Form->input(
+				'del_flg',
+				array(
+					'type' => 'hidden',
+					'value' => '0'
+				)
+			);
 
+		echo '<ul>';
+			if($article['Article']['del_flg'] == 2){
+				echo '<li>'.$this->Form->submit('下書きを保存する', array('name' => 'save')).'</li>';
+			}
+
+			echo '<li>'.$this->Form->submit('編集を完了する', array('name' => 'finish')).'</li>';
+		echo '</ul>';
+
+		echo $this->Form->end();
 		
-		echo '<p>';
-			echo $this->Form->postLink(
-					'雑学を削除する',
-						array('action' => 'delete', $article_id),
-						array('confirm' => '本当に削除してよろしいですか？')
-				);
-		echo '</p>';
+		echo $this->Form->postLink(
+				'雑学を削除する',
+					array('class' => 'testaaa'),						array('action' => 'delete', $article['Article']['id']),
+					array('confirm' => '本当に削除してよろしいですか？')
+			);
 	?>
 </div>

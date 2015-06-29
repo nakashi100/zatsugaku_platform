@@ -45,8 +45,10 @@
 				)
 			);
 
-		echo $this->Form->submit('雑学を投稿する', array('name' => 'post'));
-		echo $this->Form->submit('下書きを保存する', array('name' => 'save'));
+		echo '<ul>';
+			echo '<li>'.$this->Form->submit('雑学を投稿する', array('name' => 'post')).'</li>';
+			echo '<li>'.$this->Form->submit('下書きを保存する', array('name' => 'save')).'</li>';
+		echo '</ul>';
 
 		echo $this->Form->end();
 

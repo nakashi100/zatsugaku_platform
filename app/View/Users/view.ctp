@@ -24,10 +24,10 @@
 	echo '<div class="user-bottom">';
 		echo '<ul class="user-bottom__post">';
 			if(isset($favorites_flag) && $favorites_flag == 1){
-				echo '<li>'.$this->Html->Link('投稿した雑学'.' ('.$count_articles.'件) ', array('controller' => 'Users', 'action' => 'view', $user['User']['id'])).'</li>';
+				echo '<li>'.$this->Html->Link('作成した雑学'.' (投稿済 '.$count_posted_articles.'件) ', array('controller' => 'Users', 'action' => 'view', $user['User']['id'])).'</li>';
 				echo '<li class="active">'.$this->Html->Link('お気に入り雑学'.' ('.$count_favorite_articles.'件) ', array('controller' => 'Users', 'action' => 'view', $user['User']['id'], 1)).'</li>';
 			}else{
-				echo '<li class="active">'.$this->Html->Link('投稿した雑学'.' ('.$count_articles.'件) ', array('controller' => 'Users', 'action' => 'view', $user['User']['id'])).'</li>';
+				echo '<li class="active">'.$this->Html->Link('作成した雑学'.' (投稿済 '.$count_posted_articles.'件) ', array('controller' => 'Users', 'action' => 'view', $user['User']['id'])).'</li>';
 				echo '<li>'.$this->Html->Link('お気に入り雑学'.' ('.$count_favorite_articles.'件) ', array('controller' => 'Users', 'action' => 'view', $user['User']['id'], 1)).'</li>';
 			}
 
@@ -38,6 +38,7 @@
 	******************************/
 		echo '<div class="article-contents">';
 			foreach($articles as $article){
+				/********  投稿済み雑学の場合    ******/
 				if($article['Article']['del_flg'] == 0){
 					echo '<div class="article-contents__cel">';
 						echo '<div class="article-contents__cel__left">';
@@ -52,19 +53,44 @@
 							echo $this->Html->Link($article['User']['nickname'], array('controller' => 'Users', 'action' => 'view', $article['Article']['user_id'])); // 投稿者
 						echo '</div>';
 					echo '</div>';
-				}
 
-				if( isset($loginUser) && ($article['Article']['user_id'] == $loginUser['id'] || $loginUser && $loginUser['role'] == '2') ){
-		 				echo '<span class="user-bottom__article__edit">';
-		 				echo $this->Html->Link(
-		 						'編集する',
-		 							array(
-		 								'controller' => 'Articles',
-		 								'action' => 'edit', $article['Article']['id']
-		 								)
-		 					);
-		 				echo '</span>';
-		 		}
+					if( isset($loginUser) && ($article['Article']['user_id'] == $loginUser['id'] || $loginUser['role'] == '2') ){
+			 				echo '<span class="user-bottom__article__edit">';
+			 				echo $this->Html->Link(
+			 						'編集する',
+			 							array(
+			 								'controller' => 'Articles',
+			 								'action' => 'edit', $article['Article']['id']
+			 								)
+			 					);
+			 				echo '</span>';
+			 		}
+			 	}
+			 	/********  下書き中雑学の場合    ******/
+			 	if($article['Article']['del_flg'] == 2){
+			 		if( isset($loginUser) && ($article['Article']['user_id'] == $loginUser['id'] || $loginUser['role'] == '2') ){
+						echo '<div class="article-contents__cel">';
+							echo '<div class="article-contents__cel__left">';
+								echo '<p class="article-contents__cel__category">'.$article['Category']['category_name'].'</p>'; // カテゴリ
+							echo '</div>';
+
+							echo '<div class="article-contents__cel__right">';
+								echo '<a class="article-contents__cel__saved-article-title">'.$article['Article']['title'].'</a>'; // タイトル
+								echo '<p class="article-contents__cel__detail article-contents__cel__saved-article">';
+								echo $this->Html->Link(
+									'【下書き中】編集を続ける(link貼る)',
+										array(
+											'controller' => 'Articles',
+											'action' => 'edit', $article['Article']['id']
+											)
+									);
+								echo '</p>'; // 詳細
+							echo '</div>';
+						echo '</div>';
+					}
+			 	}
+
+
 			}
 		echo '</div>';
 	/*****************************

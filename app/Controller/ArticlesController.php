@@ -170,7 +170,7 @@ class ArticlesController extends AppController{
 				$save_data = $this->request->data;
 				$save_data['Article']['del_flg'] = '2'; // 下書きの場合はdel_flgを2に変更する
 				$this->Article->save($save_data); // DBに保存
-				$this->Session->setFlash(__('編集中の雑学が下書きに保存されました'));
+				$this->Session->setFlash(__('雑学が下書きに保存されました'));
 				return $this->redirect(array('controller' => 'Users', 'action' => 'view', $save_data['Article']['user_id']));
 			}else{
 				$this->Session->setFlash(__('雑学の編集に失敗しました'));
@@ -201,17 +201,25 @@ class ArticlesController extends AppController{
 		// editページにアクセスした際にフォームにデータをセットしておく
 		if(!$this->request->data){
 			$this->request->data = $article;
-			$this->set('article_id', $id);
+			$this->set('article', $article);
 		}
 
 		//編集ボタンが押された場合に、DBへの保存処理を行う
 		if($this->request->is(array('post', 'put'))){
 			$this->Article->id = $id;
-			if($this->Article->save($this->request->data)){
+			if(isset($this->request->data['finish'])){
+				$this->Article->save($this->request->data);
 				$this->Session->setFlash(__('雑学が編集されました'));
 				return $this->redirect(array('action' => 'detail', $id));
+			}elseif(isset($this->request->data['save'])){
+				$save_data = $this->request->data;
+				$save_data['Article']['del_flg'] = '2'; // 下書きflag
+				$this->Article->save($save_data);
+				$this->Session->setFlash(__('雑学が下書きに保存されました'));
+				return $this->redirect(array('action' => 'detail', $id));
+			}else{
+				$this->Session->setFlash(__('雑学の編集に失敗しました'));
 			}
-			$this->Session->setFlash(__('雑学の編集に失敗しました'));
 		}
 	}
 
