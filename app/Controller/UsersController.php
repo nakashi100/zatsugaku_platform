@@ -5,7 +5,7 @@ class UsersController extends AppController{
 	public $helpers = array('Html', 'Form', 'Session', 'UploadPack.Upload'); // viewの拡張機能を呼び出す
 	public $components = array('Session', 'Paginator'); // Controllerの拡張機能を呼び出す
 	public $paginate = array(
-		'limit' => 3,
+		'limit' => 5,
 		'order' => array(
 			'created' => 'desc'
 		)
@@ -41,12 +41,21 @@ class UsersController extends AppController{
 		}
 
 		$this->set('user', $user);
+		$loginUser = $this->Auth->user();
 
 		// 該当ユーザーの投稿した雑学一覧をpaginateした上でviewに渡す
 		if(!$favorites){
-			$this->Paginator->settings = $this->paginate;
-			$articles = $this->Paginator->paginate('Article', array('Article.user_id' => $id, 'Article.del_flg' => '0'));
-			$this->set('articles', $articles);
+			// 他ユーザーのマイページで下書き中の雑学を見れないようにするために条件分けする
+			if($id == $loginUser['id']){
+				$this->Paginator->settings = $this->paginate;
+				$articles = $this->Paginator->paginate('Article', array('Article.user_id' => $id, 'Article.del_flg' => array(0, 2)));
+				$this->set('articles', $articles);
+			}elseif($id != $loginUser['id']){
+				$this->Paginator->settings = $this->paginate;
+				$articles = $this->Paginator->paginate('Article', array('Article.user_id' => $id, 'Article.del_flg' => '0'));
+				$this->set('articles', $articles);
+			}
+
 		}
 
 		// お気に入りした雑学一覧をpaginateした上でviewに渡す
@@ -59,8 +68,12 @@ class UsersController extends AppController{
 		}
 
 		// 投稿した雑学の数をviewに渡す
-		$count_articles = $this->Article->find('count', array('conditions' => array('Article.user_id' => $id, 'Article.del_flg' => '0')));
-		$this->set('count_articles', $count_articles);
+		$count_posted_articles = $this->Article->find('count', array('conditions' => array('Article.user_id' => $id, 'Article.del_flg' => '0')));
+		$this->set('count_posted_articles', $count_posted_articles);
+
+		// 下書きしている雑学の数をviewに渡す
+		$count_saved_articles = $this->Article->find('count', array('conditions' => array('Article.user_id' => $id, 'Article.del_flg' => '2')));
+		$this->set('count_saved_articles', $count_saved_articles);
 
 		// お気に入りした雑学の数をviewに渡す
 		$count_favorite_articles = $this->Favorite->find('count', array('conditions' => array('Favorite.user_id' => $id, 'Article.del_flg' => '0')));
