@@ -11,8 +11,10 @@
 	float:left;
 	width:62%;
 	padding:10px 4%;
+	padding-bottom: 2em;
 	border-left : 1px solid #f1f0e6;
 	border-right : 1px solid #f1f0e6;
+	min-height: 600px;
 }
 
 .rightColumn {
@@ -166,13 +168,14 @@
 *********************************/
 .user-top__left {
 	float: left;
-	margin: 10px 20px 10px 20px;
-	width: 100px;
+	margin: 10px 20px 10px 0px;
+	width: 120px;
 }
 
 .user-top__left img{
-	width: 100px;
-	height: 100px;
+	margin-top: 10px;
+	width: 120px;
+	height: 120px;
 }
 
 .user-top__left > a{
@@ -194,7 +197,7 @@
 	/*background: green;*/
 	overflow: hidden;
 	margin-top: 10px;
-	margin-right: 10px;
+	padding-left: 10px;
 	
 }
 
@@ -209,7 +212,6 @@
 	margin-right: 10px;
 	font-size: 14px;
 	height: 100px;
-	/*background: yellow;*/
 }
 
 .user-bottom{
@@ -265,7 +267,6 @@
 }
 
 .user-form{
-	/*background: orange;*/
 	margin: auto;
 	padding: 20px;
 	width:80%;
@@ -276,12 +277,6 @@
 	font-weight: bold;
 	margin-top: 10px;
 }
-
-/*.user-form .submit input{
-	font-size:14px;
-	color: black;
-	background: blue;
-}*/
 
 .user-form label{
 	pointer-events: none;
@@ -353,8 +348,11 @@
 }
 
 #user-form__newimg{
-	width: 100px;
-	height: 100px;
+	width: 120px;
+	height: 120px;
+	margin-left: 10px;
+	margin-bottom: 10px;
+	margin-top: -20px;
 }
 
 

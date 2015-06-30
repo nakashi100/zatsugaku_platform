@@ -1,7 +1,7 @@
 <?php
 class ArticlesController extends AppController{
 	public $uses = array('Article', 'Like', 'Comment', 'Favorite'); // Controlle内で他のModel(table)を利用できるようにする
-	public $helpers = array('Html', 'Form', 'Session'); // viewの拡張機能を呼び出す
+	public $helpers = array('Html', 'Form', 'Session', 'UploadPack.Upload'); // viewの拡張機能を呼び出す
 	public $components = array('Session', 'Paginator'); // Controllerの拡張機能を呼び出す
 	public $paginate_new = array( // Paginatorの設定
 		'limit' => 5,

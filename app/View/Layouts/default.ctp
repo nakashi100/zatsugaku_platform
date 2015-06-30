@@ -102,10 +102,8 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		</div>
 
 		<div id="footer">
-			<p align="center">フッターだよ</p>
+			<p align="center">&copy;2015 zatsugakuplatform</p>
 		</div>
-
 	</div>
-	<?php // echo $this->element('sql_dump'); ?>
 </body>
 </html>

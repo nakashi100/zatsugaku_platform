@@ -47,12 +47,29 @@ class User extends AppModel{
             'img' => array( // ここでは、"_file_name"を除いたカラム名を書く
                 'quality' => 95, // 画質指定 デフォルトでは75
                 'styles' => array(
-                    'thumb' => '100x100' // リサイズしたいサイズ
+                    'thumb' => '120x120' // リサイズしたいサイズ
                 ),
                 'default_url' => 'noimage.gif' // デフォルト画像をwebroot/imgから読み込む
             )
         )
     );
+
+    // public $actsAs = array(
+    //     'UploadPack.Upload' => array(
+    //         'avatar' => array( // ここでは、"_file_name"を除いたカラム名を書く
+    //             'quality' => 95, // 画質指定 デフォルトでは75
+    //             'avatar' => array(
+	   //              'styles' => array(
+	   //                  'thumb' => '120x120', // リサイズしたいサイズ
+	   //                  'mini' => '40×40'
+	   //              )
+    //             ),
+    //             'default_url' => 'noimage.gif' // デフォルト画像をwebroot/imgから読み込む
+    //         )
+    //     )
+    // );
+
+
 
 /**
  * パスワードのハッシュ化

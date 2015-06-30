@@ -29,6 +29,7 @@ body {
 	font-size:90%;
 	margin: 0;
 }
+
 a {
 	color: #003d4c;
 	text-decoration:none;
@@ -111,6 +112,7 @@ p {
 	padding: 6px 10px;
 	background-color: #554738;
 	color: white;
+	height: 100px;
 }
 /*#header a, #footer a {
 	color: #fff;
@@ -199,7 +201,7 @@ table td.actions a {
 .paging {
 	background:#fff;
 	color: #ccc;
-	margin-top: 1em;
+	margin-top: 3em;
 	clear:both;
 	text-align: center;
 }

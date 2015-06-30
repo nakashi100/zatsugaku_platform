@@ -69,8 +69,7 @@
 			foreach ($comments as $comment) {
 				if($comment['Comment']['del_flg'] != 1){
 					echo '<div class="article-detail-comment__cel">';
-						echo '<div class="article-detail-comment__image">写真</div>';
-						
+						echo '<div class="article-detail-comment__image">'.$this->Upload->uploadImage($comment,'User.img', array('style' => 'thumb')).'</div>';
 						echo '<div class="article-detail-comment__cel__right">';
 							echo $this->Html->Link(h($comment['User']['nickname']), array('controller' => 'Users', 'action' => 'view', $comment['Comment']['user_id']));
 							echo '<span>'.date('Y/n/j G:i', strtotime($comment['Comment']['created'])).'</span>';

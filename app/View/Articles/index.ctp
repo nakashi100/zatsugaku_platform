@@ -41,24 +41,14 @@
 		?>
 </div>
 
- <?php // echo $this->Paginator->counter(array('format' => 'TOTAL:{:count} | SHOWING:{:current} | PAGE:{:page}/{:pages}')); ?>
-
 <div class="paging">
 	<?php
-		echo $this->Paginator->prev('< '.__('previous'), array(), null, array('class' => 'prev disabled'));
-		echo $this->Paginator->numbers(array('separator' => ''));
-		echo $this->Paginator->next(__('next').'>', array(), null, array('class' => 'next disabled'));
+		// echo $this->Paginator->counter(array('format' => 'TOTAL:{:count} | SHOWING:{:current} | PAGE:{:page}/{:pages}'));
+		$pages = $this->Paginator->counter(array('format' => '{:pages}'));
+		if($pages >= 2){
+			echo $this->Paginator->prev('< '.__('前へ'), array(), null, array('class' => 'prev disabled'));
+			echo $this->Paginator->numbers(array('separator' => ''));
+			echo $this->Paginator->next(__('次へ').'>', array(), null, array('class' => 'next disabled'));
+		}
 	?>
 </div>
-
-
-
-<?php
-// echo ini_get('upload_max_filesize');
-//   echo ini_get('post_max_size');
-//   echo ini_get('memory_limit');
-// デバッグ用
-	// echo '<pre>';
-	// var_dump($articles);
-	// echo '</pre>';
-?>
