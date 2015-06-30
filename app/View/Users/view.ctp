@@ -1,7 +1,7 @@
 <?php
 	echo '<div class="user-top">';
 		echo '<div class="user-top__left">';
-			echo $this->Upload->uploadImage($user, 'User.img', array('style' => 'thumb'));
+			echo $this->Upload->uploadImage($user, 'User.avatar', array('style' => 'thumb'));
 
 			if( isset($loginUser) && ($user['User']['id'] == $loginUser['id'] || $loginUser['role'] == '2') ){
 				echo $this->Html->Link(

@@ -22,7 +22,7 @@
 			);
 
 		echo $this->Form->input(
-					'img',
+					'User.avatar',
 					array(
 						'type' => 'file',
 						'label' => 'プロフィール画像',
@@ -32,7 +32,7 @@
 
 		echo '<p><a id="user-form__imgbutton">ファイルを選択</a></p>';
 
-		echo $this->Upload->uploadImage($user, 'User.img', array('style' => 'thumb'), array('id' => 'user-form__newimg'));
+		echo $this->Upload->uploadImage($user, 'User.avatar', array('style' => 'thumb'), array('id' => 'user-form__newimg'));
 
 		echo $this->Form->input(
 				'introduce',

@@ -628,6 +628,7 @@
 	padding: 30px;
 	border-top: 3px dotted #d3a351;
 	margin-bottom: 20px;
+	margin-top: 40px;
 }
 
 .article-detail-comment{
@@ -644,12 +645,11 @@
 	background-color: #f1f0e6;
 }
 
-.article-detail-comment__image{
+.article-detail-comment__image img{
 	width: 40px;
 	height: 40px;
 	float: left;
 	margin-right: 10px;
-	background: orange;
 }
 
 .article-detail-comment__cel{
