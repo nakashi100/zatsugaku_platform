@@ -1,4 +1,3 @@
-<?php // echo $this->Html->css('article'); // cssの呼び出しを記述する  ?>
 <?php if($article['Article']['del_flg'] == 1){ throw new NotFoundException(__('この記事は削除されました')); } ?>
 
 

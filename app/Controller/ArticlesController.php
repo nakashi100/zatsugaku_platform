@@ -4,13 +4,13 @@ class ArticlesController extends AppController{
 	public $helpers = array('Html', 'Form', 'Session', 'UploadPack.Upload'); // viewの拡張機能を呼び出す
 	public $components = array('Session', 'Paginator'); // Controllerの拡張機能を呼び出す
 	public $paginate_new = array( // Paginatorの設定
-		'limit' => 5,
+		'limit' => 10,
 		'order' => array(
 			'Article.created' => 'desc' // 新着順
 		)
 	);
 	public $paginate_likes = array(
-		'limit' => 5,
+		'limit' => 10,
 		'order' => array(
 			'Article.likes' => 'desc' // 人気順
 		)
@@ -23,7 +23,6 @@ class ArticlesController extends AppController{
 		// 済・・・'edit', 'delete','create','like', 'favorite','reseteLike', resetFavorite'
 		// 未・・・'deleteComment', はauthor
 	}
-
 /**
  * 権限設定
  */
@@ -206,20 +205,28 @@ class ArticlesController extends AppController{
 
 		//編集ボタンが押された場合に、DBへの保存処理を行う
 		if($this->request->is(array('post', 'put'))){
+			$this->Article->set($this->request->data);
 			$this->Article->id = $id;
-			if(isset($this->request->data['finish'])){
-				$this->Article->save($this->request->data);
-				$this->Session->setFlash(__('雑学が編集されました'));
-				return $this->redirect(array('action' => 'detail', $id));
-			}elseif(isset($this->request->data['save'])){
-				$save_data = $this->request->data;
-				$save_data['Article']['del_flg'] = '2'; // 下書きflag
-				$this->Article->save($save_data);
-				$this->Session->setFlash(__('雑学が下書きに保存されました'));
-				return $this->redirect(array('action' => 'detail', $id));
-			}else{
-				$this->Session->setFlash(__('雑学の編集に失敗しました'));
-			}
+
+				if($this->Article->validates()){ // バリデーション
+					if(isset($this->request->data['finish'])){
+						$finish_data = $this->request->data;
+						$finish_data['Article']['del_flg'] = '0';
+						$this->Article->save($finish_data);
+						$this->Session->setFlash(__('編集した雑学が投稿されました'));
+						return $this->redirect(array('action' => 'detail', $id));
+					}elseif(isset($this->request->data['save'])){
+						$save_data = $this->request->data;
+						$save_data['Article']['del_flg'] = '2'; // 下書きflag
+						$this->Article->save($save_data);
+						$this->Session->setFlash(__('雑学が下書きに保存されました'));
+						return $this->redirect(array('action' => 'detail', $id));
+					}
+				}else{
+					// バリデーションが通らなかった場合
+					$this->Session->setFlash(__('雑学の編集に失敗しました'));
+					$this->set('article', $article);
+				}
 		}
 	}
 

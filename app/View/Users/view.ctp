@@ -54,7 +54,7 @@
 						echo '</div>';
 					echo '</div>';
 
-					if( isset($loginUser) && ($article['Article']['user_id'] == $loginUser['id'] || $loginUser['role'] == '2') ){
+					if( $favorites_flag == 0 && isset($loginUser) && ($article['Article']['user_id'] == $loginUser['id'] || $loginUser['role'] == '2') ){
 			 				echo '<span class="user-bottom__article__edit">';
 			 				echo $this->Html->Link(
 			 						'編集する',
@@ -78,11 +78,12 @@
 								echo '<a class="article-contents__cel__saved-article-title">'.$article['Article']['title'].'</a>'; // タイトル
 								echo '<p class="article-contents__cel__detail article-contents__cel__saved-article">';
 								echo $this->Html->Link(
-									'【下書き中】編集を続ける(link貼る)',
+									'【下書き中】編集を続ける',
 										array(
 											'controller' => 'Articles',
 											'action' => 'edit', $article['Article']['id']
-											)
+											),
+										array('class' => 'test')
 									);
 								echo '</p>'; // 詳細
 							echo '</div>';

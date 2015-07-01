@@ -2,6 +2,20 @@
 class Article extends AppModel{
 	public $name = 'Article'; // エイリアス的なもの
 
+	// バリデーション
+	public $validate = array(
+        'title' => array(
+            'allowEmpty' => false,
+            'rule' => array('maxLength', 60),
+            'message' => '60文字以内で入力してください',
+        ),
+        'detail' => array(
+            'allowEmpty' => false,
+            'rule' => array('maxLength', 3000),
+            'message' => '3000文字以内で入力してください',
+        )
+    );
+
 	// Article(多数)にCategory(1つ)・User(1つ)をbelongstoでアソシエーションする
 	public $belongsTo = array(
 		'Category' => array( // Categoryは配列の引数になる

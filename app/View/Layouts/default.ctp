@@ -53,7 +53,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 				<ul>
 					<?php if(isset($loginUser)): ?>
 							<li><?php echo $this->Html->Link('雑学を投稿する', array('controller' => 'Articles', 'action' => 'create')); ?></li>
-							<li><a href="#"><?php echo $loginUser['nickname']; ?></a>
+							<li><a href="#"><?php echo $this->Upload->uploadImage($loginUserDBInfo, 'User.avatar', array('style' => 'mini')); ?></a>
 								<ul>
 									<li><?php echo $this->Html->Link('マイページ', array('controller' => 'Users', 'action' => 'view', $loginUser['id'])); ?></li>
 									<li><?php echo $this->Html->Link('お気に入り雑学', array('controller' => 'Users', 'action' => 'view', $loginUser['id'], 1)); ?></li>

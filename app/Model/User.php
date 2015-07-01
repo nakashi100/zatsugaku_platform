@@ -7,6 +7,29 @@ App::uses('SimplePasswordHasher', 'Controller/Component/Auth');
 class User extends AppModel{
 	public $name = 'User'; // エイリアス的なもの
 
+	// バリデーション
+	public $validate = array(
+        'nickname' => array(
+        	'allowEmpty' => false,
+            'rule' => array('maxLength', 20),
+            'message' => '20文字以内で入力してください'
+        ),
+        'introduce' => array(
+        	'allowEmpty' => true, // 空欄でもよい
+            'rule' => array( 'maxLength', 250),
+            'message' => '250文字以内で入力してください'
+        ),
+        'email' => array(
+			'rule' => 'notEmpty'
+		),
+		'password' => array(
+			'rule' => 'notEmpty'
+		),
+		'gender' => array(
+			'rule' => 'notEmpty'
+		),
+    );
+
 	public $hasMany = array(
 		'Article' => array(
 			'className' => 'Article',
@@ -18,27 +41,6 @@ class User extends AppModel{
 		)
 	);
 
-	public $validate = array(
-		'email' => array(
-			'rule' => 'notEmpty'
-		),
-		'password' => array(
-			'rule' => 'notEmpty'
-		),
-		'nickname' => array(
-			'rule' => 'notEmpty'
-		),
-		'gender' => array(
-			'rule' => 'notEmpty'
-		),
-		'birthday' => array(
-			'rule' => 'date',
-			'allowEmpty' => true
-		),
-		'gender' => array(
-			'rule' => 'notEmpty'
-		)
-	);
 
 /**
  * 画像アップロード機能の設定

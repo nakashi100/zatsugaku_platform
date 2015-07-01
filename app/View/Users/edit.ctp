@@ -6,7 +6,8 @@
 		echo $this->Form->input(
 				'nickname',
 				array(
-					'label' => 'ニックネーム',
+					'label' => 'ニックネーム (20文字以内)',
+					// 'required' => false
 					)
 			);
 
@@ -37,12 +38,13 @@
 		echo $this->Form->input(
 				'introduce',
 				array(
-					'label' => '紹介文',
-					'type' => 'textarea'
+					'label' => '紹介文 (250文字以内)',
+					'type' => 'textarea',
+					'required' => false //html5のrequired属性の設定を外す
 				)
 			);
 
-		echo $this->Form->end('編集する');
+		echo $this->Form->end('更新する');
 	?>
 </div>
 

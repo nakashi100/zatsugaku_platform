@@ -50,10 +50,12 @@ class UsersController extends AppController{
 				$this->Paginator->settings = $this->paginate;
 				$articles = $this->Paginator->paginate('Article', array('Article.user_id' => $id, 'Article.del_flg' => array(0, 2)));
 				$this->set('articles', $articles);
+				$this->set('favorites_flag', 0);
 			}elseif($id != $loginUser['id']){
 				$this->Paginator->settings = $this->paginate;
 				$articles = $this->Paginator->paginate('Article', array('Article.user_id' => $id, 'Article.del_flg' => '0'));
 				$this->set('articles', $articles);
+				$this->set('favorites_flag', 0);
 			}
 
 		}
@@ -95,10 +97,11 @@ class UsersController extends AppController{
 
 		//編集ボタンが押された場合に、DBへの保存処理を行う
 		if($this->request->is(array('post', 'put'))){
+			$viewId = $id;
 			$this->User->id = $id;
 			if($this->User->save($this->request->data)){
 				$this->Session->setFlash(__('ユーザー情報が編集されました'));
-				return $this->redirect(array('action' => 'view', $id));
+				return $this->redirect(array('action' => 'view', $viewId));
 			}
 			$this->Session->setFlash(__('ユーザー情報の編集に失敗しました'));
 		}
@@ -108,6 +111,7 @@ class UsersController extends AppController{
 		if($this->request->is('post')){
 			$this->User->create();
 			if($this->User->save($this->request->data)){
+				$this->Auth->login();
 				return $this->redirect(array('controller' => 'Articles', 'action' => 'index')); // 実際にはapprovalに飛ばしてauth処理を行う
 			}else{
 				$this->Session->setFlash(__('ユーザー登録に失敗しました。'));
@@ -117,7 +121,7 @@ class UsersController extends AppController{
 
 	public function login(){
 		if($this->request->is('post')){
-			if($this->Auth->login()){
+			if($this->Auth->login()){ //$this->request->dataの値を使用してログインする規約になっている
 				return $this->redirect(array('controller' => 'articles', 'action' => 'index'));
 			}else{
 				$this->Session->setFlash(__('メールアドレスもしくはパスワードに間違いがあります'));

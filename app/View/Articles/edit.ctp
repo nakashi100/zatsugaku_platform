@@ -1,5 +1,5 @@
 <div class="user-form">
-	<h1>投稿雑学を編集する</h1>
+	<h1>雑学を編集する</h1>
 
 	<?php
 		echo $this->Form->create('Article', array('type' => 'file')); // 画像をuploadする際はcreateのオプションをfileにする?
@@ -24,17 +24,19 @@
 		echo $this->Form->input(
 				'title', 
 				array(
-					'label' => 'タイトル',
-					'placeholder' => 'タイトルを入力してください'
+					'label' => 'タイトル (60文字以内)',
+					'placeholder' => 'タイトルを入力してください',
+					'required' => false //html5のrequired属性の設定を外す
 				)
 			);
 
 		echo $this->Form->input(
 				'detail',
 				array(
-					'label' => '詳細',
+					'label' => '詳細 (3000文字以内)',
 					'type' => 'textarea',
-					'placeholder' => '詳細を入力してください'
+					'placeholder' => '詳細を入力してください',
+					'required' => false
 				)
 			);
 
@@ -45,27 +47,18 @@
 				)
 			);
 
-		echo $this->Form->input(
-				'del_flg',
-				array(
-					'type' => 'hidden',
-					'value' => '0'
-				)
-			);
-
 		echo '<ul>';
+			echo '<li>'.$this->Form->submit('この内容で投稿する', array('name' => 'finish')).'</li>';
 			if($article['Article']['del_flg'] == 2){
-				echo '<li>'.$this->Form->submit('下書きを保存する', array('name' => 'save')).'</li>';
+				echo '<li>'.$this->Form->submit('下書きに保存する', array('name' => 'save')).'</li>';
 			}
-
-			echo '<li>'.$this->Form->submit('編集を完了する', array('name' => 'finish')).'</li>';
 		echo '</ul>';
 
 		echo $this->Form->end();
 		
 		echo $this->Form->postLink(
 				'雑学を削除する',
-					array('class' => 'testaaa'),						array('action' => 'delete', $article['Article']['id']),
+					array('action' => 'delete', $article['Article']['id']),
 					array('confirm' => '本当に削除してよろしいですか？')
 			);
 	?>
