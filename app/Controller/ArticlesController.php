@@ -1,6 +1,6 @@
 <?php
 class ArticlesController extends AppController{
-	public $uses = array('Article', 'Like', 'Comment', 'Favorite'); // Controlle内で他のModel(table)を利用できるようにする
+	public $uses = array('Article', 'Like', 'Comment', 'Favorite', 'User'); // Controlle内で他のModel(table)を利用できるようにする
 	public $helpers = array('Html', 'Form', 'Session', 'UploadPack.Upload'); // viewの拡張機能を呼び出す
 	public $components = array('Session', 'Paginator'); // Controllerの拡張機能を呼び出す
 	public $paginate_new = array( // Paginatorの設定
@@ -112,12 +112,12 @@ class ArticlesController extends AppController{
 
 	public function detail($id = null){ // このidはarticleのid
 		if(!$id){
-			throw new NotFoundException(__('このページは存在しません'));
+			throw new NotFoundException(__('申し訳ございませんが、このURLは無効です'));
 		}
 
 		$article = $this->Article->findById($id);
-		if(!$article){
-			throw new NotFoundException(__('データがありません'));
+		if(!$article || $article['Article']['del_flg'] == ( 1 or 2)){
+			throw new NotFoundException(__('申し訳ございませんが、このURLは無効です'));
 		}
 		$this->set('article', $article);
 
@@ -153,7 +153,7 @@ class ArticlesController extends AppController{
 		$data = array('Comment' => array('id' => $id, 'del_flg' => 1)); // 更新する内容を設定
 		$fields = array('del_flg'); // 更新する項目(フィールド指定)
 		if($this->Comment->save($data, false, $fields)){
-			$this->Session->setFlash(__('このコメント(id=%s)は削除されました', h($id)));
+			$this->Session->setFlash(__('このコメントは削除されました', h($id)));
 			return $this->redirect($this->referer());
 		}
 	}
@@ -175,16 +175,6 @@ class ArticlesController extends AppController{
 				$this->Session->setFlash(__('雑学の編集に失敗しました'));
 			}
 		}
-
-
-// $data = array('Article' => array('id' => $id, 'del_flg' => '1')); // 更新する内容を設定
-// 		$fields = array('del_flg'); // 更新する項目(フィールド指定)
-// 		if($this->Article->save($data, false, $fields)){
-// 			$this->Session->setFlash(__('この雑学(id=%s)は削除されました', h($id)));
-// 			return $this->redirect(array('action' => 'index'));
-// 		}
-
-
 	}
 
 	public function edit($id = null){
@@ -214,13 +204,13 @@ class ArticlesController extends AppController{
 						$finish_data['Article']['del_flg'] = '0';
 						$this->Article->save($finish_data);
 						$this->Session->setFlash(__('編集した雑学が投稿されました'));
-						return $this->redirect(array('action' => 'detail', $id));
+						return $this->redirect(array('action' => 'index'));
 					}elseif(isset($this->request->data['save'])){
 						$save_data = $this->request->data;
 						$save_data['Article']['del_flg'] = '2'; // 下書きflag
 						$this->Article->save($save_data);
 						$this->Session->setFlash(__('雑学が下書きに保存されました'));
-						return $this->redirect(array('action' => 'detail', $id));
+						return $this->redirect(array('controller' => 'Users', 'action' => 'view', $save_data['Article']['user_id']));
 					}
 				}else{
 					// バリデーションが通らなかった場合
@@ -238,8 +228,9 @@ class ArticlesController extends AppController{
 		$data = array('Article' => array('id' => $id, 'del_flg' => '1')); // 更新する内容を設定
 		$fields = array('del_flg'); // 更新する項目(フィールド指定)
 		if($this->Article->save($data, false, $fields)){
-			$this->Session->setFlash(__('この雑学(id=%s)は削除されました', h($id)));
-			return $this->redirect(array('action' => 'index'));
+			$this->Session->setFlash(__('この雑学は削除されました', h($id)));
+			$loginUserId = $this->Auth->user('id');
+			return $this->redirect(array('controller' => 'Users', 'action' => 'view', $loginUserId));
 		}
 	}
 

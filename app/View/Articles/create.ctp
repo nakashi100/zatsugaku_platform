@@ -23,7 +23,7 @@
 		echo $this->Form->input(
 				'title', 
 				array(
-					'label' => 'タイトル',
+					'label' => 'タイトル (60文字以内)',
 					'placeholder' => 'タイトルを入力してください'
 				)
 			);
@@ -31,7 +31,7 @@
 		echo $this->Form->input(
 				'detail',
 				array(
-					'label' => '詳細',
+					'label' => '詳細 (3000文字以内)',
 					'type' => 'textarea',
 					'placeholder' => '詳細を入力してください'
 				)

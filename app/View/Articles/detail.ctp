@@ -1,6 +1,3 @@
-<?php if($article['Article']['del_flg'] == 1){ throw new NotFoundException(__('この記事は削除されました')); } ?>
-
-
 <div class="article-detail-title">
 	
 	<div class="article-detail-title-left">

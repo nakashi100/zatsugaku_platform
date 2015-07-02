@@ -20,7 +20,8 @@ class User extends AppModel{
             'message' => '250文字以内で入力してください'
         ),
         'email' => array(
-			'rule' => 'notEmpty'
+			'rule' => 'isUnique',
+			"message" => "このメールアドレスは既に登録されています"
 		),
 		'password' => array(
 			'rule' => 'notEmpty'

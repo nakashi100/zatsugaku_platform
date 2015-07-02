@@ -26,7 +26,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		<?php echo $title_for_layout; ?>
 	</title>
 	<?php
-		echo $this->Html->script( '//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js');
+		echo $this->Html->script( '//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js'); // jQuery導入
 		
 		echo $this->Html->meta('icon');
 
@@ -105,5 +105,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 			<p align="center">&copy;2015 zatsugakuplatform</p>
 		</div>
 	</div>
+
+	<?php echo $this->Html->script('script'); //javascriptを読み込む ?>
 </body>
 </html>

@@ -32,12 +32,12 @@ class UsersController extends AppController{
 
 	public function view($id = null, $favorites = null){
 		if(!$id){
-			throw new NotFoundException(__('このページは存在しません'));
+			throw new NotFoundException(__('申し訳ございませんが、このURLは無効です'));
 		}
 
 		$user = $this->User->findById($id);
-		if(!$user){
-			throw new NotFoundException(__('データが存在しません'));
+		if(!$user || $user['User']['del_flg'] == 1){
+			throw new NotFoundException(__('申し訳ございませんが、このURLは無効です'));
 		}
 
 		$this->set('user', $user);
