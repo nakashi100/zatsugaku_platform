@@ -33,7 +33,8 @@
 						echo '<div class="article-contents__cel__right">';
 							echo $this->Html->Link($article['Article']['title'], array('controller' => 'Articles', 'action' => 'detail', $article['Article']['id'])); // タイトル
 							echo '<p class="article-contents__cel__detail">'.$article['Article']['detail'].'</p>'; // 詳細
-							echo $this->Html->Link($article['User']['nickname'], array('controller' => 'Users', 'action' => 'view', $article['Article']['user_id'])); // 投稿者
+							if($article['User']['del_flg'] == 0){
+								echo $this->Html->Link($article['User']['nickname'], array('controller' => 'Users', 'action' => 'view', $article['Article']['user_id']));}else{ echo '<p class="article-contents__cel__detail__user">'.$article['User']['nickname'].'</p>'; } // 投稿者
 						echo '</div>';
 					echo '</div>';
 				}

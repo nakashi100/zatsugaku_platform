@@ -12,7 +12,11 @@
 		<h2 class="article-detail-title-right__title"><?php echo $article['Article']['title']; ?></h2>
 		
 		<div class="article-detail-title-right__author">
-			<p><?php echo $this->Html->Link($article['User']['nickname'], array('controller' =>'Users', 'action' => 'view', $article['Article']['user_id'])); ?></p>
+			<p><?php if($article['User']['del_flg'] == 0){
+				echo $this->Html->Link($article['User']['nickname'], array('controller' =>'Users', 'action' => 'view', $article['Article']['user_id']));
+				}else{
+					echo '<span class="article-detail-title-right__author__user">'.$article['User']['nickname'].'</span>';
+				} ?></p>
 			<p><?php echo date('Y/n/j', strtotime($article['Article']['created'])); ?>更新</p>
 		</div>
 
@@ -51,8 +55,7 @@
 				}
 			?>
 		</div> <!-- article-detail-title-action -->
-	</div> <!-- article-detail-title-right --
-</div> <!-- article-detail-top -->
+	</div> <!-- article-detail-title-right -->
 
 <div class="article-detail-detail">
 	<p><?php echo $article['Article']['detail']; ?></p>
@@ -67,8 +70,12 @@
 					echo '<div class="article-detail-comment__cel">';
 						echo '<div class="article-detail-comment__image">'.$this->Upload->uploadImage($comment,'User.avatar', array('style' => 'mini')).'</div>';
 						echo '<div class="article-detail-comment__cel__right">';
-							echo $this->Html->Link(h($comment['User']['nickname']), array('controller' => 'Users', 'action' => 'view', $comment['Comment']['user_id']));
-							echo '<span>'.date('Y/n/j G:i', strtotime($comment['Comment']['created'])).'</span>';
+							if($comment['User']['del_flg'] == 0){
+								echo $this->Html->Link(h($comment['User']['nickname']), array('controller' => 'Users', 'action' => 'view', $comment['Comment']['user_id']));
+							}else{
+									echo '<span class="article-detail-comment__cel__right__user">'.h($comment['User']['nickname']).'</span>';
+							}
+							echo '<span class="article-detail-comment__cel__right__date">'.date('Y/n/j G:i', strtotime($comment['Comment']['created'])).'</span>';
 
 							if(isset($loginUser) && ($comment['Comment']['user_id'] == $loginUser['id'] || $loginUser['role'] == '2')){
 								echo $this->Form->postLink(
