@@ -119,13 +119,18 @@ class UsersController extends AppController{
 		}
 	}
 
-	public function login(){
+	public function login($id = null){
 		if($this->request->is('post')){
 			if($this->Auth->login()){ //$this->request->dataの値を使用してログインする規約になっている
-				return $this->redirect(array('controller' => 'articles', 'action' => 'index'));
+				if(isset($id)){
+					return $this->redirect(array('controller' => 'articles', 'action' => 'detail', $id));
+				}else{
+					return $this->redirect(array('controller' => 'articles', 'action' => 'index'));
+				}
 			}else{
 				$this->Session->setFlash(__('メールアドレスもしくはパスワードに間違いがあります'));
 			}
+
 		}
 
 		// 直接URLを打ち込んだ場合の対応
@@ -138,6 +143,7 @@ class UsersController extends AppController{
   //           }
   //       }
 	}
+
 
 	public function logout(){
 		$this->Auth->logout();

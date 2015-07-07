@@ -59,6 +59,7 @@
 		echo $this->Form->postLink(
 				'雑学を削除する',
 					array('action' => 'delete', $article['Article']['id']),
+					array('class' => 'user-form__delete'),
 					array('confirm' => '本当に削除してよろしいですか？')
 			);
 	?>

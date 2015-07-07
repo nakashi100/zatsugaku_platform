@@ -38,20 +38,30 @@
 								);
 					}
 
-					//////////////// お気に入りの処理 ////////////////
-						if($favorite){
-								echo $this->Form->postLink(
-										'お気に入りを取り消す',
-										array('action' => 'resetFavorite', $article['Article']['id'], $loginUser['id'])
-									);
-						}
+				//////////////// お気に入りの処理 ////////////////
+					if($favorite){
+							echo $this->Form->postLink(
+									'お気に入りを取り消す',
+									array('action' => 'resetFavorite', $article['Article']['id'], $loginUser['id'])
+								);
+					}
 
-						if(!$favorite){
-								echo $this->Form->postLink(
-										'お気に入りに追加',
-										array('action' => 'favorite', $article['Article']['id'], $loginUser['id'])
-									);
-						}
+					if(!$favorite){
+							echo $this->Form->postLink(
+									'お気に入りに追加',
+									array('action' => 'favorite', $article['Article']['id'], $loginUser['id'])
+								);
+					}
+				}else{
+					// $loginUserが存在しなかった場合の処理
+					echo $this->Html->link(
+								'へぇ！なるほど♪',
+								array('controller' => 'Users', 'action' => 'login', $article['Article']['id'])
+							);
+					echo $this->Html->Link(
+								'お気に入りに追加',
+								array('controller' => 'Users', 'action' => 'login', $article['Article']['id'])
+							);
 				}
 			?>
 		</div> <!-- article-detail-title-action -->
@@ -101,6 +111,9 @@
 				echo $this->Form->input('user_id', array('type' => 'hidden', 'value' => $loginUser['id']));
 				echo $this->Form->end('投稿', array('class' => 'test'));
 			echo '</div>';
+		}else{
+			// ログインしていない場合
+			echo $this->Html->link('ログインしてコメントを書く', array('controller' => 'Users', 'action' => 'login', $article['Article']['id']), array('class' => 'article-detail-comment__notlogin'));
 		}
 	?>
 </div> <!-- article-detail-comment -->
