@@ -43,7 +43,7 @@
 					echo '<div class="article-contents__cel">';
 						echo '<div class="article-contents__cel__left">';
 							echo '<p class="article-contents__cel__category">'.$article['Category']['category_name'].'</p>'; // カテゴリ
-							echo '<p class="article-contents__cel__view">'.$article['Article']['view'].'<span>view</span></p>'; // View数
+							echo '<p class="article-contents__cel__view">'.$article['Article']['pageviews'].'<span>view</span></p>'; // View数
 							echo '<p class="article-contents__cel__likes">'.count($article['Like']).'<span>へぇ</span></p>'; // へぇ数
 						echo '</div>';
 

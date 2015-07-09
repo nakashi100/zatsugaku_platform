@@ -119,6 +119,10 @@ class ArticlesController extends AppController{
 		if(!$article || $article['Article']['del_flg'] == ( 1 or 2)){
 			throw new NotFoundException(__('申し訳ございませんが、このURLは無効です'));
 		}
+
+		// pageviewsを1増やしてDBに上書き保存する
+		$article['Article']['pageviews'] += 1;
+		$this->Article->save($article);
 		$this->set('article', $article);
 
 		// 該当記事に関するコメントをviewに渡す
@@ -251,7 +255,7 @@ class ArticlesController extends AppController{
 		$fields2 = array('likes');
 		$this->Article->save($data2, false, $fields2);
 
-		$this->Session->setFlash(__('この記事をイイネしました!'));
+		$this->Session->setFlash(__('この記事を「へぇ！」しました!'));
 		return $this->redirect($this->referer());
 	}
 
@@ -271,7 +275,7 @@ class ArticlesController extends AppController{
 		$fields = array('likes'); // 更新する項目
 		$this->Article->save($data, false, $fields);
 
-		$this->Session->setFlash(__('この記事へのイイネを取り消しました'));
+		$this->Session->setFlash(__('この記事への「へぇ！」を取り消しました'));
 		return $this->redirect($this->referer());
 	}
 

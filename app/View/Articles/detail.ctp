@@ -3,7 +3,7 @@
 	<div class="article-detail-title-left">
 		<ul>
 			<li><?php echo $article['Category']['category_name']; ?></li>
-			<li><?php echo $article['Article']['view']; ?><span>view</span></li>
+			<li><?php echo $article['Article']['pageviews']; ?><span>view</span></li>
 			<li><?php echo count($article['Like']); ?><span>へぇ</span></li>
 		</ul>
 	</div>
