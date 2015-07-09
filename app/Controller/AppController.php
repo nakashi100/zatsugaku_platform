@@ -68,7 +68,7 @@ class AppController extends Controller {
 			$loginUser = $this->Auth->user();
 			$this->set('loginUser', $loginUser);
 
-            // プロフィール編集後に最新のユーザー情報をフッターに伝えるために必要(loginUserはDBをupdateした後もログイン時点の情報のままなので)
+            // プロフィール編集後に最新のユーザー情報をヘッダーに伝えるために必要(loginUserはDBをupdateした後もログイン時点の情報のままなので)
             $loginUserDBInfo = $this->User->findById($loginUser['id']);
             $this->set('loginUserDBInfo', $loginUserDBInfo);
 		}

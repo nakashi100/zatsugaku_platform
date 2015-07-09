@@ -33,11 +33,7 @@ class Article extends AppModel{
 		'Like' => array(
 			'className' => 'Like',
 			'foreignKey' => 'article_id'
-		),
-		// 'Favorite' => array(
-		// 	'className' => 'Favorite',
-		// 	'foreignKey' => 'article_id',
-		// )
+		)
 	);
 
 	// 該当ユーザーの投稿した雑学を配列として取得するメソッド
@@ -49,5 +45,4 @@ class Article extends AppModel{
 		$articles = $this->find('all', array('conditions' => $conditions));
 		return $articles;
 	}
-
 }

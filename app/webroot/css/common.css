@@ -129,7 +129,6 @@
 .header__dropdownmenu ul li ul li:hover {
   background:#d3a351;
 }
-
 .header__dropdownmenu ul li:hover ul li, .header__dropdownmenu ul li a:hover ul li{
   visibility: visible;
   overflow: visible;
@@ -331,8 +330,6 @@
 	margin-bottom: 10px;
 	margin-top: -20px;
 }
-
-
 
 /********************************
 * Article

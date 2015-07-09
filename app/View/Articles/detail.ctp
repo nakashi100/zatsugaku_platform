@@ -1,21 +1,20 @@
 <div class="article-detail-title">
-	
 	<div class="article-detail-title-left">
 		<ul>
-			<li><?php echo $article['Category']['category_name']; ?></li>
-			<li><?php echo $article['Article']['pageviews']; ?><span>view</span></li>
+			<li><?php echo h($article['Category']['category_name']); ?></li>
+			<li><?php echo h($article['Article']['pageviews']); ?><span>view</span></li>
 			<li><?php echo count($article['Like']); ?><span>へぇ</span></li>
 		</ul>
 	</div>
 
 	<div class="article-detail-title-right">
-		<h2 class="article-detail-title-right__title"><?php echo $article['Article']['title']; ?></h2>
+		<h2 class="article-detail-title-right__title"><?php echo h($article['Article']['title']); ?></h2>
 		
 		<div class="article-detail-title-right__author">
 			<p><?php if($article['User']['del_flg'] == 0){
-				echo $this->Html->Link($article['User']['nickname'], array('controller' =>'Users', 'action' => 'view', $article['Article']['user_id']));
+				echo $this->Html->Link(h($article['User']['nickname']), array('controller' =>'Users', 'action' => 'view', $article['Article']['user_id']));
 				}else{
-					echo '<span class="article-detail-title-right__author__user">'.$article['User']['nickname'].'</span>';
+					echo '<span class="article-detail-title-right__author__user">'.h($article['User']['nickname']).'</span>';
 				} ?></p>
 			<p><?php echo date('Y/n/j', strtotime($article['Article']['created'])); ?>更新</p>
 		</div>
@@ -66,9 +65,10 @@
 			?>
 		</div> <!-- article-detail-title-action -->
 	</div> <!-- article-detail-title-right -->
+</div> <!-- article-detail-title -->
 
 <div class="article-detail-detail">
-	<p><?php echo $article['Article']['detail']; ?></p>
+	<p><?php echo h($article['Article']['detail']); ?></p>
 </div>
 
 <div class="article-detail-comment">

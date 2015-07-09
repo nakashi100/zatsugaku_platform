@@ -46,7 +46,6 @@ class User extends AppModel{
 		)
 	);
 
-
 /**
  * 画像アップロード機能の設定
  */
@@ -75,8 +74,6 @@ class User extends AppModel{
         )
     );
 
-
-
 /**
  * パスワードのハッシュ化
  */
@@ -87,9 +84,6 @@ class User extends AppModel{
 		}
 		return true;
 	}
-
-
-
 }
 
 

@@ -51,6 +51,5 @@
 		echo '</ul>';
 
 		echo $this->Form->end();
-
 	?>
 </div>

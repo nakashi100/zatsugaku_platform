@@ -18,34 +18,30 @@ class ArticlesController extends AppController{
 
 	public function beforeFilter(){
 		parent::beforeFilter();
-		$this->Auth->allow('index', 'detail');
-
-		// 済・・・'edit', 'delete','create','like', 'favorite','reseteLike', resetFavorite'
-		// 未・・・'deleteComment', はauthor
+		$this->Auth->allow('index', 'detail'); // 誰でも閲覧可能
 	}
-/**
- * 権限設定
- */
+
+/*
+* 権限設定
+*/
 	public function isAuthorized($user = null){
 		// ログインユーザーならばだれでも可能
 		if(in_array($this->action, array('create', 'like', 'favorite'))){
 			return true;
 		}
 
-		// オーナーのみ可能
 		if(in_array($this->action, array('edit', 'delete'))){
 			$articleId = (int) $this->request->params['pass']['0'];
 			$article = $this->Article->findById($articleId);
 			$articleUserId = $article['Article']['user_id'];
 
-			if($articleUserId == $user['id']){
+			if($articleUserId == $user['id']){ // オーナー(投稿者)のみ可能
 				return true;
 			}
 		}
 
 		if(in_array($this->action, array('resetLike', 'resetFavorite'))){
 			$userId = (int) $this->request->parms['pass']['0'];
-
 			return true;
 		}
 
@@ -54,7 +50,7 @@ class ArticlesController extends AppController{
 			$comment = $this->Comment->findById($commentId);
 			$commentUserId = $comment['Comment']['user_id'];
 
-			if($commentUserId == $user['id']){
+			if($commentUserId == $user['id']){ // オーナー(投稿者)のみ可能
 				return true;
 			}
 		}
@@ -95,15 +91,14 @@ class ArticlesController extends AppController{
 			$this->set('search_word', $search_word);
 		}
 
-		if($this->request->query('favorites')){
-			$category_id = 0;
-			$user_id = $this->request->query('favorites');
+		// if($this->request->query('favorites')){
+		// 	$category_id = 0;
+		// 	$user_id = $this->request->query('favorites');
 
-			$article_id_list = $this->Favorite->find('list', array('fields' => 'Favorite.article_id', 'conditions' => array('Favorite.user_id' => $user_id)));
+		// 	$article_id_list = $this->Favorite->find('list', array('fields' => 'Favorite.article_id', 'conditions' => array('Favorite.user_id' => $user_id)));
 
-			$articles = $this->Paginator->paginate('Article', array('Article.del_flg' => '0', 'Article.id' => array_values($article_id_list)));
-		}
-
+		// 	$articles = $this->Paginator->paginate('Article', array('Article.del_flg' => '0', 'Article.id' => array_values($article_id_list)));
+		// }
 
 		///////////  Viewにデータを渡す　///////////
 		$this->set('articles', $articles);
@@ -306,5 +301,4 @@ class ArticlesController extends AppController{
 			return $this->redirect($this->referer());
 		}
 	}
-
 }

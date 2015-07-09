@@ -47,5 +47,3 @@
 		echo $this->Form->end('更新する');
 	?>
 </div>
-
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script> <!-- プレビュー機能実装のためにJavaScript File APIを使う -->

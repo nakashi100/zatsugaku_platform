@@ -57,7 +57,6 @@ class UsersController extends AppController{
 				$this->set('articles', $articles);
 				$this->set('favorites_flag', 0);
 			}
-
 		}
 
 		// お気に入りした雑学一覧をpaginateした上でviewに渡す
@@ -130,25 +129,12 @@ class UsersController extends AppController{
 			}else{
 				$this->Session->setFlash(__('メールアドレスもしくはパスワードに間違いがあります'));
 			}
-
 		}
-
-		// 直接URLを打ち込んだ場合の対応
-		// else if ($this->Auth->user()) {
-  //           $loginUser = $this->Auth->user();
-  //           if ($loginUser['del_flg'] == 0 && $loginUser['role'] != 0) {
-  //               return $this->redirect(array('controller' => 'events', 'action' => 'index'));
-  //           } else if($loginUser['del_flg'] == 1) {
-  //               return $this->redirect(array('action' => 'logout'));
-  //           }
-  //       }
 	}
-
 
 	public function logout(){
 		$this->Auth->logout();
 		$this->Session->destroy();
 		return $this->redirect(array('action' => 'login'));
 	}
-
 }

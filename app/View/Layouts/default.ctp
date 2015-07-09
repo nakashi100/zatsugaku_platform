@@ -67,14 +67,10 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 					<?php endif; ?>
 				</ul>
 			</div>
-
-
 		</div>  <!-- id="header"閉じ -->
 
 		<div id="content">
-
 			<div class="leftColumn">
-
 				<p class="leftColum__category"><?php echo $this->Html->Link('ALL',
 										array(
 											'controller' => 'Articles',
@@ -82,7 +78,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 										)
 									); ?></p>
 				<?php foreach($categories as $category): ?>
-					<p class="leftColum__category"><?php echo $this->Html->Link($category['Category']['category_name'],
+					<p class="leftColum__category"><?php echo $this->Html->Link(h($category['Category']['category_name']),
 										array(
 											'controller' => 'Articles',
 											'action' => 'index',
@@ -98,8 +94,8 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 			</div>
 
 			<div class="rightColumn">
+				<!-- 左カラム -->
 			</div>
-
 		</div>
 
 		<div id="footer">

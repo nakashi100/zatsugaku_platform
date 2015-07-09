@@ -26,5 +26,4 @@ class Comment extends AppModel{
 		$comments = $this->find('all', array('conditions' => $conditions));
 		return $comments;
 	}
-
 }

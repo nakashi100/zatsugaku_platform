@@ -4,7 +4,6 @@ $(function(){
       $(".user-form__img").trigger("click");
     });
 
-
     // ファイルが選択されたら画像を変更する 
     $(".user-form__img").on("change", function(){
       var file = $(this).prop('files')[0];
@@ -15,6 +14,7 @@ $(function(){
       fr.readAsDataURL(file);  // 画像読み込み
     });
 
+    // flashMessageをゆっくり消す
     setTimeout(function(){
       $("#flashMessage").fadeOut("slow");
     }, 1600);
