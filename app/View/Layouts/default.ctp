@@ -14,16 +14,17 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
-$cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework');
-$cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
+// $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework');
+// $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 ?>
 <!DOCTYPE html>
 <html>
 <head>
 	<?php echo $this->Html->charset(); ?>
 	<title>
-		<?php echo $cakeDescription ?>:
-		<?php echo $title_for_layout; ?>
+		<?php //echo '雑学ファクトリー | みんなでつくる雑学サイト' ?>
+		<?php echo '雑学ファクトリー'; ?>
+		<?php if($this->fetch('subTitle')){echo $this->fetch('subTitle');}else{echo ' | みんなでつくる雑学サイト';} ?>
 	</title>
 	<?php
 		echo $this->Html->script( '//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js'); // jQuery導入
@@ -47,7 +48,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 				</form>
 			</div>
 
-			<h1 class="header__title"><?php echo $this->Html->Link('雑学Platform', array('controller' => 'Articles', 'action' => 'index')); ?></h1>
+			<h1 class="header__title"><?php echo $this->Html->Link('雑学ファクトリー', array('controller' => 'Articles', 'action' => 'index')); ?></h1>
 
 			<div class="header__dropdownmenu">
 				<ul>

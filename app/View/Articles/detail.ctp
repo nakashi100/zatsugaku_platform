@@ -1,3 +1,7 @@
+<?php
+	$this->assign('subTitle', ' ｜ '.h($article['Article']['title']));
+?>
+
 <div class="article-detail-title">
 	<div class="article-detail-title-left">
 		<ul>

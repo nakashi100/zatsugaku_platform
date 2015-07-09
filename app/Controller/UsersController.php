@@ -3,7 +3,7 @@
 class UsersController extends AppController{
 	public $uses = array('User', 'Article', 'Favorite'); // Controlle内で他のModel(table)を利用できるようにする
 	public $helpers = array('Html', 'Form', 'Session', 'UploadPack.Upload'); // viewの拡張機能を呼び出す
-	public $components = array('Session', 'Paginator'); // Controllerの拡張機能を呼び出す
+	public $components = array('Session', 'Paginator', 'Security'); // Controllerの拡張機能を呼び出す
 	public $paginate = array(
 		'limit' => 5,
 		'order' => array(
