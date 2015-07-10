@@ -32,7 +32,8 @@
  * In development mode, you need to click the flash message to continue.
  */
 // Configure::write('debug', 2);
-   Configure::write('debug', 1);
+	// Configure::write('debug', 0); // 本番環境？
+   Configure::write('debug', 1); // 開発環境
 
 /**
  * Configure the Error handler used to handle errors for your application. By default

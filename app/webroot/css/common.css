@@ -20,6 +20,12 @@
 	width:12%;
 	padding:0px 2.5%;
 }
+.error400-title{
+	margin-top: 50px;
+	font-weight: bolder;
+	font-size: 40px;
+	color: #554738;
+}
 
 /********************************
 * 共通部分

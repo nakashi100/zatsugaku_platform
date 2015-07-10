@@ -65,9 +65,13 @@ class ArticlesController extends AppController{
 			$this->set('sort_flag', 1);
 		}
 
-		if($this->request->query('sort') == 2){
+		elseif($this->request->query('sort') == 2){
 			$this->Paginator->settings = $this->paginate_likes;
 			$this->set('sort_flag', 2);
+		}
+
+		else{
+			throw new NotFoundException();
 		}
 
 		///////////			カテゴリ指定・検索内容の有無			///////////
@@ -76,11 +80,12 @@ class ArticlesController extends AppController{
 			$articles = $this->Paginator->paginate('Article', array('Article.del_flg' => '0', 'Article.category_id' => $category_id)); // アソシエーションによりdel_flgが２つ存在するので「モデル名.del_flg」で指定
 
 			$category= $this->Category->findById($category_id);
+			if(!$category){throw new NotFoundException();} // 404用の例外処理を投げる
 			$category_name = $category['Category']['category_name'];
 			$this->set('category_name', $category_name);
 		}
 
-		if(!($this->request->query('category_id'))){ // getで値が取得できない場合(ALL)、category_id=0の場合もここで処理される?
+		if(!($this->request->query('category_id'))){ // getで値が取得できない場合(ALL)、category_id=0の場合もここで処理されるっぽい
 			$category_id = 0;
 			$articles = $this->Paginator->paginate('Article', array('Article.del_flg' => '0'));
 		}
