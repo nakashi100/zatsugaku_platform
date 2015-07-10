@@ -8,4 +8,6 @@
 			<?php echo $this->Form->input('password', array('label' => 'パスワード')); ?>
 		</fieldset>
 	<?php echo $this->Form->end(__('ログイン')); ?>
+
+	<p class="user-form__loginlink"><?php echo '※ ユーザー登録がお済みでない方は'.$this->Html->link('こちらから新規登録(無料)', array('action' => 'signup')).'できます。'; ?></p>
 </div>

@@ -2,6 +2,20 @@
 class Article extends AppModel{
 	public $name = 'Article'; // エイリアス的なもの
 
+	// バリデーション
+	public $validate = array(
+        'title' => array(
+            'allowEmpty' => false,
+            'rule' => array('maxLength', 60),
+            'message' => '60文字以内で入力してください',
+        ),
+        'detail' => array(
+            'allowEmpty' => false,
+            'rule' => array('maxLength', 3000),
+            'message' => '3000文字以内で入力してください',
+        )
+    );
+
 	// Article(多数)にCategory(1つ)・User(1つ)をbelongstoでアソシエーションする
 	public $belongsTo = array(
 		'Category' => array( // Categoryは配列の引数になる
@@ -19,11 +33,7 @@ class Article extends AppModel{
 		'Like' => array(
 			'className' => 'Like',
 			'foreignKey' => 'article_id'
-		),
-		// 'Favorite' => array(
-		// 	'className' => 'Favorite',
-		// 	'foreignKey' => 'article_id',
-		// )
+		)
 	);
 
 	// 該当ユーザーの投稿した雑学を配列として取得するメソッド
@@ -35,5 +45,4 @@ class Article extends AppModel{
 		$articles = $this->find('all', array('conditions' => $conditions));
 		return $articles;
 	}
-
 }

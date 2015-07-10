@@ -3,7 +3,7 @@
 class UsersController extends AppController{
 	public $uses = array('User', 'Article', 'Favorite'); // Controlle内で他のModel(table)を利用できるようにする
 	public $helpers = array('Html', 'Form', 'Session', 'UploadPack.Upload'); // viewの拡張機能を呼び出す
-	public $components = array('Session', 'Paginator'); // Controllerの拡張機能を呼び出す
+	public $components = array('Session', 'Paginator', 'Security'); // Controllerの拡張機能を呼び出す
 	public $paginate = array(
 		'limit' => 5,
 		'order' => array(
@@ -32,12 +32,12 @@ class UsersController extends AppController{
 
 	public function view($id = null, $favorites = null){
 		if(!$id){
-			throw new NotFoundException(__('このページは存在しません'));
+			throw new NotFoundException(__('申し訳ございませんが、このURLは無効です'));
 		}
 
 		$user = $this->User->findById($id);
-		if(!$user){
-			throw new NotFoundException(__('データが存在しません'));
+		if(!$user || $user['User']['del_flg'] == 1){
+			throw new NotFoundException(__('申し訳ございませんが、このURLは無効です'));
 		}
 
 		$this->set('user', $user);
@@ -50,12 +50,13 @@ class UsersController extends AppController{
 				$this->Paginator->settings = $this->paginate;
 				$articles = $this->Paginator->paginate('Article', array('Article.user_id' => $id, 'Article.del_flg' => array(0, 2)));
 				$this->set('articles', $articles);
+				$this->set('favorites_flag', 0);
 			}elseif($id != $loginUser['id']){
 				$this->Paginator->settings = $this->paginate;
 				$articles = $this->Paginator->paginate('Article', array('Article.user_id' => $id, 'Article.del_flg' => '0'));
 				$this->set('articles', $articles);
+				$this->set('favorites_flag', 0);
 			}
-
 		}
 
 		// お気に入りした雑学一覧をpaginateした上でviewに渡す
@@ -95,10 +96,11 @@ class UsersController extends AppController{
 
 		//編集ボタンが押された場合に、DBへの保存処理を行う
 		if($this->request->is(array('post', 'put'))){
+			$viewId = $id;
 			$this->User->id = $id;
 			if($this->User->save($this->request->data)){
 				$this->Session->setFlash(__('ユーザー情報が編集されました'));
-				return $this->redirect(array('action' => 'view', $id));
+				return $this->redirect(array('action' => 'view', $viewId));
 			}
 			$this->Session->setFlash(__('ユーザー情報の編集に失敗しました'));
 		}
@@ -108,6 +110,7 @@ class UsersController extends AppController{
 		if($this->request->is('post')){
 			$this->User->create();
 			if($this->User->save($this->request->data)){
+				$this->Auth->login();
 				return $this->redirect(array('controller' => 'Articles', 'action' => 'index')); // 実際にはapprovalに飛ばしてauth処理を行う
 			}else{
 				$this->Session->setFlash(__('ユーザー登録に失敗しました。'));
@@ -115,24 +118,18 @@ class UsersController extends AppController{
 		}
 	}
 
-	public function login(){
+	public function login($id = null){
 		if($this->request->is('post')){
-			if($this->Auth->login()){
-				return $this->redirect(array('controller' => 'articles', 'action' => 'index'));
+			if($this->Auth->login()){ //$this->request->dataの値を使用してログインする規約になっている
+				if(isset($id)){
+					return $this->redirect(array('controller' => 'articles', 'action' => 'detail', $id));
+				}else{
+					return $this->redirect(array('controller' => 'articles', 'action' => 'index'));
+				}
 			}else{
 				$this->Session->setFlash(__('メールアドレスもしくはパスワードに間違いがあります'));
 			}
 		}
-
-		// 直接URLを打ち込んだ場合の対応
-		// else if ($this->Auth->user()) {
-  //           $loginUser = $this->Auth->user();
-  //           if ($loginUser['del_flg'] == 0 && $loginUser['role'] != 0) {
-  //               return $this->redirect(array('controller' => 'events', 'action' => 'index'));
-  //           } else if($loginUser['del_flg'] == 1) {
-  //               return $this->redirect(array('action' => 'logout'));
-  //           }
-  //       }
 	}
 
 	public function logout(){
@@ -140,5 +137,4 @@ class UsersController extends AppController{
 		$this->Session->destroy();
 		return $this->redirect(array('action' => 'login'));
 	}
-
 }

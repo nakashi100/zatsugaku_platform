@@ -23,7 +23,7 @@
 		echo $this->Form->input(
 				'title', 
 				array(
-					'label' => 'タイトル',
+					'label' => 'タイトル (60文字以内)',
 					'placeholder' => 'タイトルを入力してください'
 				)
 			);
@@ -31,7 +31,7 @@
 		echo $this->Form->input(
 				'detail',
 				array(
-					'label' => '詳細',
+					'label' => '詳細 (3000文字以内)',
 					'type' => 'textarea',
 					'placeholder' => '詳細を入力してください'
 				)
@@ -46,11 +46,10 @@
 			);
 
 		echo '<ul>';
-			echo '<li>'.$this->Form->submit('雑学を投稿する', array('name' => 'post')).'</li>';
-			echo '<li>'.$this->Form->submit('下書きを保存する', array('name' => 'save')).'</li>';
+			echo '<li>'.$this->Form->submit('この内容で投稿する', array('name' => 'post')).'</li>';
+			echo '<li>'.$this->Form->submit('下書きに保存する', array('name' => 'save')).'</li>';
 		echo '</ul>';
 
 		echo $this->Form->end();
-
 	?>
 </div>

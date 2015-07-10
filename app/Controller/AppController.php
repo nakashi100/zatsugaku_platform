@@ -67,6 +67,10 @@ class AppController extends Controller {
 		if($this->Auth->user()){
 			$loginUser = $this->Auth->user();
 			$this->set('loginUser', $loginUser);
+
+            // プロフィール編集後に最新のユーザー情報をヘッダーに伝えるために必要(loginUserはDBをupdateした後もログイン時点の情報のままなので)
+            $loginUserDBInfo = $this->User->findById($loginUser['id']);
+            $this->set('loginUserDBInfo', $loginUserDBInfo);
 		}
 
 		$categories = $this->Category->find('all');
@@ -76,7 +80,5 @@ class AppController extends Controller {
 				$search_word = $this->request->query('search');
 				return $this->redirect(array('controller' => 'Articles' , 'action' => 'index' , '?' => array('search_word' => $search_word)));
 		}
-	
 	}
-
 }

@@ -13,8 +13,10 @@
  * @since         CakePHP(tm) v 0.10.0.1076
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 ?>
-<h2><?php echo $message; ?></h2>
+
+<!-- <h2><?php echo $message; ?></h2>
 <p class="error">
 	<strong><?php echo __d('cake', 'Error'); ?>: </strong>
 	<?php printf(
@@ -26,4 +28,10 @@
 if (Configure::read('debug') > 0):
 	echo $this->element('exception_stack_trace');
 endif;
-?>
+?> -->
+
+
+<?php // $this->layout = false; // レイアウトを使用しない ?>
+
+<h1 class="error400-title">Not Found...</h1>
+<p>お探しのページが見つかりませんでした。削除されたか、移動した可能性がございます。</p>

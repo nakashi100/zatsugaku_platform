@@ -71,4 +71,6 @@
 			?>
 		</fieldset>
 	<?php echo $this->Form->end('登録'); ?>
+
+	<p class="user-form__loginlink"><?php echo '※ 既にユーザー登録完了している方は'.$this->Html->link('こちらからログイン', array('action' => 'login')).'できます。'; ?></p>
 </div>

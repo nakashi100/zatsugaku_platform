@@ -1,6 +1,15 @@
 <?php
 class Comment extends AppModel{
 
+	// バリデーション
+	public $validate = array(
+        'comment' => array(
+        	'allowEmpty' => false, // 空欄ではダメ
+            'rule' => array( 'maxLength', 1000),
+            'message' => '1000文字以内で入力してください'
+        )
+    );
+
 	public $belongsTo = array(
 		'User' => array(
 			'className' => 'User',
@@ -17,5 +26,4 @@ class Comment extends AppModel{
 		$comments = $this->find('all', array('conditions' => $conditions));
 		return $comments;
 	}
-
 }

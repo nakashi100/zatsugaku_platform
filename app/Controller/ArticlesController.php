@@ -1,16 +1,16 @@
 <?php
 class ArticlesController extends AppController{
-	public $uses = array('Article', 'Like', 'Comment', 'Favorite'); // Controlle内で他のModel(table)を利用できるようにする
+	public $uses = array('Article', 'Like', 'Comment', 'Favorite', 'User'); // Controlle内で他のModel(table)を利用できるようにする
 	public $helpers = array('Html', 'Form', 'Session', 'UploadPack.Upload'); // viewの拡張機能を呼び出す
-	public $components = array('Session', 'Paginator'); // Controllerの拡張機能を呼び出す
+	public $components = array('Session', 'Paginator', 'Security'); // Controllerの拡張機能を呼び出す
 	public $paginate_new = array( // Paginatorの設定
-		'limit' => 5,
+		'limit' => 10,
 		'order' => array(
 			'Article.created' => 'desc' // 新着順
 		)
 	);
 	public $paginate_likes = array(
-		'limit' => 5,
+		'limit' => 10,
 		'order' => array(
 			'Article.likes' => 'desc' // 人気順
 		)
@@ -18,35 +18,30 @@ class ArticlesController extends AppController{
 
 	public function beforeFilter(){
 		parent::beforeFilter();
-		$this->Auth->allow('index', 'detail');
-
-		// 済・・・'edit', 'delete','create','like', 'favorite','reseteLike', resetFavorite'
-		// 未・・・'deleteComment', はauthor
+		$this->Auth->allow('index', 'detail'); // 誰でも閲覧可能
 	}
 
-/**
- * 権限設定
- */
+/*
+* 権限設定
+*/
 	public function isAuthorized($user = null){
 		// ログインユーザーならばだれでも可能
 		if(in_array($this->action, array('create', 'like', 'favorite'))){
 			return true;
 		}
 
-		// オーナーのみ可能
 		if(in_array($this->action, array('edit', 'delete'))){
 			$articleId = (int) $this->request->params['pass']['0'];
 			$article = $this->Article->findById($articleId);
 			$articleUserId = $article['Article']['user_id'];
 
-			if($articleUserId == $user['id']){
+			if($articleUserId == $user['id']){ // オーナー(投稿者)のみ可能
 				return true;
 			}
 		}
 
 		if(in_array($this->action, array('resetLike', 'resetFavorite'))){
 			$userId = (int) $this->request->parms['pass']['0'];
-
 			return true;
 		}
 
@@ -55,7 +50,7 @@ class ArticlesController extends AppController{
 			$comment = $this->Comment->findById($commentId);
 			$commentUserId = $comment['Comment']['user_id'];
 
-			if($commentUserId == $user['id']){
+			if($commentUserId == $user['id']){ // オーナー(投稿者)のみ可能
 				return true;
 			}
 		}
@@ -70,9 +65,13 @@ class ArticlesController extends AppController{
 			$this->set('sort_flag', 1);
 		}
 
-		if($this->request->query('sort') == 2){
+		elseif($this->request->query('sort') == 2){
 			$this->Paginator->settings = $this->paginate_likes;
 			$this->set('sort_flag', 2);
+		}
+
+		else{
+			throw new NotFoundException();
 		}
 
 		///////////			カテゴリ指定・検索内容の有無			///////////
@@ -81,11 +80,12 @@ class ArticlesController extends AppController{
 			$articles = $this->Paginator->paginate('Article', array('Article.del_flg' => '0', 'Article.category_id' => $category_id)); // アソシエーションによりdel_flgが２つ存在するので「モデル名.del_flg」で指定
 
 			$category= $this->Category->findById($category_id);
+			if(!$category){throw new NotFoundException();} // 404用の例外処理を投げる
 			$category_name = $category['Category']['category_name'];
 			$this->set('category_name', $category_name);
 		}
 
-		if(!($this->request->query('category_id'))){ // getで値が取得できない場合(ALL)、category_id=0の場合もここで処理される?
+		if(!($this->request->query('category_id'))){ // getで値が取得できない場合(ALL)、category_id=0の場合もここで処理されるっぽい
 			$category_id = 0;
 			$articles = $this->Paginator->paginate('Article', array('Article.del_flg' => '0'));
 		}
@@ -96,15 +96,14 @@ class ArticlesController extends AppController{
 			$this->set('search_word', $search_word);
 		}
 
-		if($this->request->query('favorites')){
-			$category_id = 0;
-			$user_id = $this->request->query('favorites');
+		// if($this->request->query('favorites')){
+		// 	$category_id = 0;
+		// 	$user_id = $this->request->query('favorites');
 
-			$article_id_list = $this->Favorite->find('list', array('fields' => 'Favorite.article_id', 'conditions' => array('Favorite.user_id' => $user_id)));
+		// 	$article_id_list = $this->Favorite->find('list', array('fields' => 'Favorite.article_id', 'conditions' => array('Favorite.user_id' => $user_id)));
 
-			$articles = $this->Paginator->paginate('Article', array('Article.del_flg' => '0', 'Article.id' => array_values($article_id_list)));
-		}
-
+		// 	$articles = $this->Paginator->paginate('Article', array('Article.del_flg' => '0', 'Article.id' => array_values($article_id_list)));
+		// }
 
 		///////////  Viewにデータを渡す　///////////
 		$this->set('articles', $articles);
@@ -113,13 +112,17 @@ class ArticlesController extends AppController{
 
 	public function detail($id = null){ // このidはarticleのid
 		if(!$id){
-			throw new NotFoundException(__('このページは存在しません'));
+			throw new NotFoundException(__('申し訳ございませんが、このURLは無効です'));
 		}
 
 		$article = $this->Article->findById($id);
-		if(!$article){
-			throw new NotFoundException(__('データがありません'));
+		if(!$article || $article['Article']['del_flg'] == ( 1 or 2)){
+			throw new NotFoundException(__('申し訳ございませんが、このURLは無効です'));
 		}
+
+		// pageviewsを1増やしてDBに上書き保存する
+		$article['Article']['pageviews'] += 1;
+		$this->Article->save($article);
 		$this->set('article', $article);
 
 		// 該当記事に関するコメントをviewに渡す
@@ -154,7 +157,7 @@ class ArticlesController extends AppController{
 		$data = array('Comment' => array('id' => $id, 'del_flg' => 1)); // 更新する内容を設定
 		$fields = array('del_flg'); // 更新する項目(フィールド指定)
 		if($this->Comment->save($data, false, $fields)){
-			$this->Session->setFlash(__('このコメント(id=%s)は削除されました', h($id)));
+			$this->Session->setFlash(__('このコメントは削除されました', h($id)));
 			return $this->redirect($this->referer());
 		}
 	}
@@ -176,16 +179,6 @@ class ArticlesController extends AppController{
 				$this->Session->setFlash(__('雑学の編集に失敗しました'));
 			}
 		}
-
-
-// $data = array('Article' => array('id' => $id, 'del_flg' => '1')); // 更新する内容を設定
-// 		$fields = array('del_flg'); // 更新する項目(フィールド指定)
-// 		if($this->Article->save($data, false, $fields)){
-// 			$this->Session->setFlash(__('この雑学(id=%s)は削除されました', h($id)));
-// 			return $this->redirect(array('action' => 'index'));
-// 		}
-
-
 	}
 
 	public function edit($id = null){
@@ -206,20 +199,28 @@ class ArticlesController extends AppController{
 
 		//編集ボタンが押された場合に、DBへの保存処理を行う
 		if($this->request->is(array('post', 'put'))){
+			$this->Article->set($this->request->data);
 			$this->Article->id = $id;
-			if(isset($this->request->data['finish'])){
-				$this->Article->save($this->request->data);
-				$this->Session->setFlash(__('雑学が編集されました'));
-				return $this->redirect(array('action' => 'detail', $id));
-			}elseif(isset($this->request->data['save'])){
-				$save_data = $this->request->data;
-				$save_data['Article']['del_flg'] = '2'; // 下書きflag
-				$this->Article->save($save_data);
-				$this->Session->setFlash(__('雑学が下書きに保存されました'));
-				return $this->redirect(array('action' => 'detail', $id));
-			}else{
-				$this->Session->setFlash(__('雑学の編集に失敗しました'));
-			}
+
+				if($this->Article->validates()){ // バリデーション
+					if(isset($this->request->data['finish'])){
+						$finish_data = $this->request->data;
+						$finish_data['Article']['del_flg'] = '0';
+						$this->Article->save($finish_data);
+						$this->Session->setFlash(__('編集した雑学が投稿されました'));
+						return $this->redirect(array('action' => 'index'));
+					}elseif(isset($this->request->data['save'])){
+						$save_data = $this->request->data;
+						$save_data['Article']['del_flg'] = '2'; // 下書きflag
+						$this->Article->save($save_data);
+						$this->Session->setFlash(__('雑学が下書きに保存されました'));
+						return $this->redirect(array('controller' => 'Users', 'action' => 'view', $save_data['Article']['user_id']));
+					}
+				}else{
+					// バリデーションが通らなかった場合
+					$this->Session->setFlash(__('雑学の編集に失敗しました'));
+					$this->set('article', $article);
+				}
 		}
 	}
 
@@ -231,8 +232,9 @@ class ArticlesController extends AppController{
 		$data = array('Article' => array('id' => $id, 'del_flg' => '1')); // 更新する内容を設定
 		$fields = array('del_flg'); // 更新する項目(フィールド指定)
 		if($this->Article->save($data, false, $fields)){
-			$this->Session->setFlash(__('この雑学(id=%s)は削除されました', h($id)));
-			return $this->redirect(array('action' => 'index'));
+			$this->Session->setFlash(__('この雑学は削除されました', h($id)));
+			$loginUserId = $this->Auth->user('id');
+			return $this->redirect(array('controller' => 'Users', 'action' => 'view', $loginUserId));
 		}
 	}
 
@@ -253,7 +255,7 @@ class ArticlesController extends AppController{
 		$fields2 = array('likes');
 		$this->Article->save($data2, false, $fields2);
 
-		$this->Session->setFlash(__('この記事をイイネしました!'));
+		$this->Session->setFlash(__('この記事を「へぇ！」しました!'));
 		return $this->redirect($this->referer());
 	}
 
@@ -273,7 +275,7 @@ class ArticlesController extends AppController{
 		$fields = array('likes'); // 更新する項目
 		$this->Article->save($data, false, $fields);
 
-		$this->Session->setFlash(__('この記事へのイイネを取り消しました'));
+		$this->Session->setFlash(__('この記事への「へぇ！」を取り消しました'));
 		return $this->redirect($this->referer());
 	}
 
@@ -304,5 +306,4 @@ class ArticlesController extends AppController{
 			return $this->redirect($this->referer());
 		}
 	}
-
 }

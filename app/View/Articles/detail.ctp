@@ -1,22 +1,25 @@
-<?php // echo $this->Html->css('article'); // cssの呼び出しを記述する  ?>
-<?php if($article['Article']['del_flg'] == 1){ throw new NotFoundException(__('この記事は削除されました')); } ?>
-
+<?php
+	$this->assign('subTitle', ' ｜ '.h($article['Article']['title']));
+?>
 
 <div class="article-detail-title">
-	
 	<div class="article-detail-title-left">
 		<ul>
-			<li><?php echo $article['Category']['category_name']; ?></li>
-			<li><?php echo $article['Article']['view']; ?><span>view</span></li>
+			<li><?php echo h($article['Category']['category_name']); ?></li>
+			<li><?php echo h($article['Article']['pageviews']); ?><span>view</span></li>
 			<li><?php echo count($article['Like']); ?><span>へぇ</span></li>
 		</ul>
 	</div>
 
 	<div class="article-detail-title-right">
-		<h2 class="article-detail-title-right__title"><?php echo $article['Article']['title']; ?></h2>
+		<h2 class="article-detail-title-right__title"><?php echo h($article['Article']['title']); ?></h2>
 		
 		<div class="article-detail-title-right__author">
-			<p><?php echo $this->Html->Link($article['User']['nickname'], array('controller' =>'Users', 'action' => 'view', $article['Article']['user_id'])); ?></p>
+			<p><?php if($article['User']['del_flg'] == 0){
+				echo $this->Html->Link(h($article['User']['nickname']), array('controller' =>'Users', 'action' => 'view', $article['Article']['user_id']));
+				}else{
+					echo '<span class="article-detail-title-right__author__user">'.h($article['User']['nickname']).'</span>';
+				} ?></p>
 			<p><?php echo date('Y/n/j', strtotime($article['Article']['created'])); ?>更新</p>
 		</div>
 
@@ -38,28 +41,38 @@
 								);
 					}
 
-					//////////////// お気に入りの処理 ////////////////
-						if($favorite){
-								echo $this->Form->postLink(
-										'お気に入りを取り消す',
-										array('action' => 'resetFavorite', $article['Article']['id'], $loginUser['id'])
-									);
-						}
+				//////////////// お気に入りの処理 ////////////////
+					if($favorite){
+							echo $this->Form->postLink(
+									'お気に入りを取り消す',
+									array('action' => 'resetFavorite', $article['Article']['id'], $loginUser['id'])
+								);
+					}
 
-						if(!$favorite){
-								echo $this->Form->postLink(
-										'お気に入りに追加',
-										array('action' => 'favorite', $article['Article']['id'], $loginUser['id'])
-									);
-						}
+					if(!$favorite){
+							echo $this->Form->postLink(
+									'お気に入りに追加',
+									array('action' => 'favorite', $article['Article']['id'], $loginUser['id'])
+								);
+					}
+				}else{
+					// $loginUserが存在しなかった場合の処理
+					echo $this->Html->link(
+								'へぇ！なるほど♪',
+								array('controller' => 'Users', 'action' => 'login', $article['Article']['id'])
+							);
+					echo $this->Html->Link(
+								'お気に入りに追加',
+								array('controller' => 'Users', 'action' => 'login', $article['Article']['id'])
+							);
 				}
 			?>
 		</div> <!-- article-detail-title-action -->
 	</div> <!-- article-detail-title-right -->
-</div> <!-- article-detail-top -->
+</div> <!-- article-detail-title -->
 
 <div class="article-detail-detail">
-	<p><?php echo $article['Article']['detail']; ?></p>
+	<p><?php echo h($article['Article']['detail']); ?></p>
 </div>
 
 <div class="article-detail-comment">
@@ -69,10 +82,14 @@
 			foreach ($comments as $comment) {
 				if($comment['Comment']['del_flg'] != 1){
 					echo '<div class="article-detail-comment__cel">';
-						echo '<div class="article-detail-comment__image">'.$this->Upload->uploadImage($comment,'User.img', array('style' => 'thumb')).'</div>';
+						echo '<div class="article-detail-comment__image">'.$this->Upload->uploadImage($comment,'User.avatar', array('style' => 'mini')).'</div>';
 						echo '<div class="article-detail-comment__cel__right">';
-							echo $this->Html->Link(h($comment['User']['nickname']), array('controller' => 'Users', 'action' => 'view', $comment['Comment']['user_id']));
-							echo '<span>'.date('Y/n/j G:i', strtotime($comment['Comment']['created'])).'</span>';
+							if($comment['User']['del_flg'] == 0){
+								echo $this->Html->Link(h($comment['User']['nickname']), array('controller' => 'Users', 'action' => 'view', $comment['Comment']['user_id']));
+							}else{
+									echo '<span class="article-detail-comment__cel__right__user">'.h($comment['User']['nickname']).'</span>';
+							}
+							echo '<span class="article-detail-comment__cel__right__date">'.date('Y/n/j G:i', strtotime($comment['Comment']['created'])).'</span>';
 
 							if(isset($loginUser) && ($comment['Comment']['user_id'] == $loginUser['id'] || $loginUser['role'] == '2')){
 								echo $this->Form->postLink(
@@ -98,6 +115,9 @@
 				echo $this->Form->input('user_id', array('type' => 'hidden', 'value' => $loginUser['id']));
 				echo $this->Form->end('投稿', array('class' => 'test'));
 			echo '</div>';
+		}else{
+			// ログインしていない場合
+			echo $this->Html->link('ログインしてコメントを書く', array('controller' => 'Users', 'action' => 'login', $article['Article']['id']), array('class' => 'article-detail-comment__notlogin'));
 		}
 	?>
 </div> <!-- article-detail-comment -->
