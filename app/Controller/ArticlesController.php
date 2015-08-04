@@ -18,7 +18,7 @@ class ArticlesController extends AppController{
 
 	public function beforeFilter(){
 		parent::beforeFilter();
-		$this->Auth->allow('index', 'detail'); // 誰でも閲覧可能
+		$this->Auth->allow('index', 'detail', 'json_data'); // 誰でも閲覧可能
 	}
 
 /*
@@ -306,4 +306,34 @@ class ArticlesController extends AppController{
 			return $this->redirect($this->referer());
 		}
 	}
+
+	public function json_data($category_id = null) {
+		if(!isset($category_id)){
+			throw new NotFoundException(__('このページは存在しません'));
+		}
+
+		$articlesInfo = $this->Article->getArticlesInfoForApp($category_id);
+
+		$dataArray = array();
+		
+		foreach($articlesInfo as $info){
+			$data = array(
+				'id' => $info['Article']['id'],
+				'title' => $info['Article']['title'],
+				'detail' => $info['Article']['detail'],
+				'created' => $info['Article']['created'],
+				'likes' => $info['Article']['likes'],
+				'pageviews' => $info['Article']['pageviews'],
+				'category' => $info['Category']['category_name'],
+				'userName' => $info['User']['nickname']
+			);
+
+			array_push($dataArray, $data);
+		}
+
+		$this->set('json_data', $dataArray);
+		$this->viewClass='Json';
+		$this->set('_serialize', 'json_data');
+	}
+	
 }

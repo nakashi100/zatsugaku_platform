@@ -45,4 +45,29 @@ class Article extends AppModel{
 		$articles = $this->find('all', array('conditions' => $conditions));
 		return $articles;
 	}
+
+	// iOSアプリに表示する情報を渡すメソッド
+	public function getArticlesInfoForApp($category_id) {
+		if ($category_id == 0) {
+			$conditions = array(
+			'Article.del_flg' => 0,
+			
+			// 'order' => array('Article.created' => 'desc')
+
+
+			);
+		}
+
+		if ($category_id != 0) {
+			$conditions = array(
+				'Article.category_id' => $category_id,
+				'Article.del_flg' => 0
+			);
+		}
+
+		$articlesInfo = $this->find('all' , array('conditions' => $conditions, 'order' => array('Article.created' => 'desc')));
+		return $articlesInfo;
+	}
+
+
 }

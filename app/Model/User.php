@@ -30,7 +30,8 @@ class User extends AppModel{
 			'rule' => 'notEmpty'
 		),
 		'avatar' => array(
-     	   'rule' => array('fileSize', '<=', '5MB'),
+			'allowEmpty' => true,
+			'rule' => array('fileSize', '<=', '5MB'),
         	'message' => '画像は5MB以内でお願いします'
     	)
     );

@@ -5,7 +5,7 @@ class UsersController extends AppController{
 	public $helpers = array('Html', 'Form', 'Session', 'UploadPack.Upload'); // viewの拡張機能を呼び出す
 	public $components = array('Session', 'Paginator', 'Security'); // Controllerの拡張機能を呼び出す
 	public $paginate = array(
-		'limit' => 5,
+		'limit' => 10,
 		'order' => array(
 			'created' => 'desc'
 		)

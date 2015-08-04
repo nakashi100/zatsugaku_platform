@@ -20,7 +20,7 @@
 				}else{
 					echo '<span class="article-detail-title-right__author__user">'.h($article['User']['nickname']).'</span>';
 				} ?></p>
-			<p><?php echo date('Y/n/j', strtotime($article['Article']['created'])); ?>更新</p>
+			<p><?php echo date('Y/n/j', strtotime($article['Article']['modified'])); ?>更新</p>
 		</div>
 
 		<div class="article-detail-title-action">
