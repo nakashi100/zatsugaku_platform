@@ -325,6 +325,7 @@ class ArticlesController extends AppController{
 				'likes' => $info['Article']['likes'],
 				'pageviews' => $info['Article']['pageviews'],
 				'category' => $info['Category']['category_name'],
+				'userId' => $info['Article']['user_id'],
 				'userName' => $info['User']['nickname']
 			);
 

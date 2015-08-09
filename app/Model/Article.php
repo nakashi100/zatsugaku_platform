@@ -51,10 +51,6 @@ class Article extends AppModel{
 		if ($category_id == 0) {
 			$conditions = array(
 			'Article.del_flg' => 0,
-			
-			// 'order' => array('Article.created' => 'desc')
-
-
 			);
 		}
 
